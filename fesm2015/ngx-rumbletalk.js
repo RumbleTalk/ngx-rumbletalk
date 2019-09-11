@@ -1,5 +1,5 @@
 import { DomSanitizer } from '@angular/platform-browser';
-import { Injectable, Component, Input, NgModule, defineInjectable } from '@angular/core';
+import { Injectable, Component, Input, ChangeDetectionStrategy, NgModule, defineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -43,6 +43,7 @@ NgxRumbletalkComponent.decorators = [
     { type: Component, args: [{
                 selector: 'ngx-rumbletalk',
                 template: "<iframe\r\n  [src]=\"safeSrc\"\r\n  allowtransparency=\"true\"\r\n  allow=\"microphone; camera\"\r\n  [width]=\"width\"\r\n  [height]=\"height\"\r\n></iframe>\r\n",
+                changeDetection: ChangeDetectionStrategy.OnPush,
                 styles: ["iframe{border:0;width:100%;height:100%;background-color:transparent;overflow:hidden}"]
             }] }
 ];

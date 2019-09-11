@@ -50,6 +50,7 @@
             { type: i0.Component, args: [{
                         selector: 'ngx-rumbletalk',
                         template: "<iframe\r\n  [src]=\"safeSrc\"\r\n  allowtransparency=\"true\"\r\n  allow=\"microphone; camera\"\r\n  [width]=\"width\"\r\n  [height]=\"height\"\r\n></iframe>\r\n",
+                        changeDetection: i0.ChangeDetectionStrategy.OnPush,
                         styles: ["iframe{border:0;width:100%;height:100%;background-color:transparent;overflow:hidden}"]
                     }] }
         ];
