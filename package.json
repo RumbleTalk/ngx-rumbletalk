@@ -1,0 +1,35 @@
+{
+  "name": "ngx-rumbletalk",
+  "version": "0.0.1",
+  "description": "RumbleTalk Angular integration",
+  "author": "RumbleTalk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RumbleTalk/ngx-rumbletalk.git"
+  },
+  "homepage": "https://github.com/RumbleTalk/ngx-rumbletalk",
+  "keywords": [
+    "angular",
+    "javascript",
+    "typescript",
+    "rumbletalk"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/common": "^7.2.0",
+    "@angular/core": "^7.2.0"
+  },
+  "main": "bundles/ngx-rumbletalk.umd.js",
+  "module": "fesm5/ngx-rumbletalk.js",
+  "es2015": "fesm2015/ngx-rumbletalk.js",
+  "esm5": "esm5/ngx-rumbletalk.js",
+  "esm2015": "esm2015/ngx-rumbletalk.js",
+  "fesm5": "fesm5/ngx-rumbletalk.js",
+  "fesm2015": "fesm2015/ngx-rumbletalk.js",
+  "typings": "ngx-rumbletalk.d.ts",
+  "metadata": "ngx-rumbletalk.metadata.json",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  }
+}
