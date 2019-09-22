@@ -1,5 +1,5 @@
 import { DomSanitizer } from '@angular/platform-browser';
-import { Injectable, Component, Input, ChangeDetectionStrategy, NgModule, defineInjectable } from '@angular/core';
+import { Injectable, NgModule, Component, Input, ChangeDetectionStrategy, ViewChild, defineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -23,9 +23,38 @@ var NgxRumbletalkService = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+/** @type {?} */
+var protocol = 'https://';
+/** @type {?} */
+var baseWebUrl = 'https://www.rumbletalk.com/';
+/** @type {?} */
+var serviceRelativeUrl = 'client/service.php?hash=';
+/** @type {?} */
+var server = 'stagging5.rumbletalk.net:4433';
+/** @type {?} */
+var messageInterval;
 var NgxRumbletalkComponent = /** @class */ (function () {
     function NgxRumbletalkComponent(sanitizer) {
+        var _this = this;
         this.sanitizer = sanitizer;
+        /**
+         * handles postMessage requests
+         * @param event - the event object
+         */
+        this.info = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
+            if (isFinite(event.data)) {
+                clearInterval(messageInterval);
+            }
+            else if (typeof event.data === 'object') {
+                if (event.data.reload) {
+                    _this.reload();
+                }
+            }
+        });
     }
     Object.defineProperty(NgxRumbletalkComponent.prototype, "safeSrc", {
         get: /**
@@ -43,11 +72,142 @@ var NgxRumbletalkComponent = /** @class */ (function () {
     NgxRumbletalkComponent.prototype.ngOnInit = /**
      * @return {?}
      */
-    function () { };
+    function () {
+        this.addListeners();
+        this.instantiateQuery();
+    };
+    /**
+     * add the event listeners based on the embed type and device
+     */
+    /**
+     * add the event listeners based on the embed type and device
+     * @return {?}
+     */
+    NgxRumbletalkComponent.prototype.addListeners = /**
+     * add the event listeners based on the embed type and device
+     * @return {?}
+     */
+    function () {
+        window.addEventListener('message', this.info, false);
+    };
+    /**
+     * reloads the iframe (or parent page) in case of a server request
+     */
+    /**
+     * reloads the iframe (or parent page) in case of a server request
+     * @return {?}
+     */
+    NgxRumbletalkComponent.prototype.reload = /**
+     * reloads the iframe (or parent page) in case of a server request
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        /** @type {?} */
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', baseWebUrl + serviceRelativeUrl + this.hash, true);
+        xhr.onreadystatechange = (/**
+         * @return {?}
+         */
+        function () {
+            if (xhr.readyState !== 4) {
+                return;
+            }
+            try {
+                /** @type {?} */
+                var response = JSON.parse(xhr.responseText);
+                if (response.status) {
+                    server = response.address;
+                    /** @type {?} */
+                    var address = protocol + server + '/' + _this.hash + '/';
+                    if (_this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
+                        _this.iframeElement.nativeElement.src = address;
+                    }
+                    else {
+                        _this.iframeElement.nativeElement.location.href = address;
+                    }
+                    _this.instantiateQuery();
+                }
+            }
+            catch (e) {
+                location.reload();
+            }
+        });
+        xhr.send();
+    };
+    /**
+     * starts [repeatedly] trying to connect to the chat using postMessage
+     */
+    /**
+     * starts [repeatedly] trying to connect to the chat using postMessage
+     * @return {?}
+     */
+    NgxRumbletalkComponent.prototype.instantiateQuery = /**
+     * starts [repeatedly] trying to connect to the chat using postMessage
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        messageInterval = setInterval((/**
+         * @return {?}
+         */
+        function () {
+            _this.query();
+        }), 1000);
+    };
+    /**
+     * instantiate a postMessage connection with the chat
+     */
+    /**
+     * instantiate a postMessage connection with the chat
+     * @return {?}
+     */
+    NgxRumbletalkComponent.prototype.query = /**
+     * instantiate a postMessage connection with the chat
+     * @return {?}
+     */
+    function () {
+        try {
+            /** @type {?} */
+            var target = void 0;
+            /** @type {?} */
+            var origin_1;
+            if (this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
+                target = this.iframeElement.nativeElement.contentWindow;
+                origin_1 = protocol + server;
+            }
+            else {
+                target = this.iframeElement.nativeElement;
+                origin_1 = baseWebUrl;
+            }
+            target.postMessage('toolbar', origin_1);
+        }
+        catch (ignore) { }
+    };
+    /**
+     * checks if the given origin is of a chat service
+     * @param origin - the URL of the origin
+     * returns boolean
+     */
+    /**
+     * checks if the given origin is of a chat service
+     * @param {?} origin - the URL of the origin
+     * returns boolean
+     * @return {?}
+     */
+    NgxRumbletalkComponent.prototype.validateOrigin = /**
+     * checks if the given origin is of a chat service
+     * @param {?} origin - the URL of the origin
+     * returns boolean
+     * @return {?}
+     */
+    function (origin) {
+        return /^https:\/\/.+\.rumbletalk\.(net|com)(:4433)?$/.test(origin);
+    };
     NgxRumbletalkComponent.decorators = [
         { type: Component, args: [{
                     selector: 'ngx-rumbletalk',
-                    template: "<iframe\r\n  [src]=\"safeSrc\"\r\n  allowtransparency=\"true\"\r\n  allow=\"microphone; camera\"\r\n  [width]=\"width\"\r\n  [height]=\"height\"\r\n></iframe>\r\n",
+                    template: "<iframe\r\n  #iframe\r\n  allowtransparency=\"true\"\r\n  allow=\"microphone; camera\"\r\n  [src]=\"safeSrc\"\r\n  [width]=\"width\"\r\n  [height]=\"height\"\r\n></iframe>\r\n",
                     changeDetection: ChangeDetectionStrategy.OnPush,
                     styles: ["iframe{border:0;width:100%;height:100%;background-color:transparent;overflow:hidden}"]
                 }] }
@@ -57,10 +217,12 @@ var NgxRumbletalkComponent = /** @class */ (function () {
         { type: DomSanitizer }
     ]; };
     NgxRumbletalkComponent.propDecorators = {
+        iframeElement: [{ type: ViewChild, args: ['iframe',] }],
         src: [{ type: Input }],
         floating: [{ type: Input }],
         width: [{ type: Input }],
-        height: [{ type: Input }]
+        height: [{ type: Input }],
+        hash: [{ type: Input }]
     };
     return NgxRumbletalkComponent;
 }());
