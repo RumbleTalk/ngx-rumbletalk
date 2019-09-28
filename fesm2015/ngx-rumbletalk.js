@@ -1,5 +1,5 @@
 import { DomSanitizer } from '@angular/platform-browser';
-import { Injectable, NgModule, Component, Input, ChangeDetectionStrategy, ViewChild, defineInjectable } from '@angular/core';
+import { Injectable, Component, Input, ChangeDetectionStrategy, ViewChild, NgModule, defineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -28,33 +28,15 @@ const baseWebUrl = 'https://www.rumbletalk.com/';
 /** @type {?} */
 const serviceRelativeUrl = 'client/service.php?hash=';
 /** @type {?} */
-let server = 'stagging5.rumbletalk.net:4433';
+const server = 'stagging5.rumbletalk.net:4433';
 /** @type {?} */
-let messageInterval;
+var messageInterval;
 class NgxRumbletalkComponent {
     /**
      * @param {?} sanitizer
      */
     constructor(sanitizer) {
         this.sanitizer = sanitizer;
-        /**
-         * handles postMessage requests
-         * @param event - the event object
-         */
-        this.info = (/**
-         * @param {?} event
-         * @return {?}
-         */
-        event => {
-            if (isFinite(event.data)) {
-                clearInterval(messageInterval);
-            }
-            else if (typeof event.data === 'object') {
-                if (event.data.reload) {
-                    this.reload();
-                }
-            }
-        });
     }
     /**
      * @return {?}
@@ -74,7 +56,22 @@ class NgxRumbletalkComponent {
      * @return {?}
      */
     addListeners() {
-        window.addEventListener('message', this.info, false);
+        window.addEventListener('message', this.info.bind(this), false);
+    }
+    /**
+     * handles postMessage requests
+     * @param {?} event - the event object
+     * @return {?}
+     */
+    info(event) {
+        if (isFinite(event.data)) {
+            clearInterval(messageInterval);
+        }
+        else if (typeof event.data === 'object') {
+            if (event.data.reload) {
+                this.reload();
+            }
+        }
     }
     /**
      * reloads the iframe (or parent page) in case of a server request
@@ -95,9 +92,10 @@ class NgxRumbletalkComponent {
                 /** @type {?} */
                 const response = JSON.parse(xhr.responseText);
                 if (response.status) {
-                    server = response.address;
                     /** @type {?} */
-                    const address = protocol + server + '/' + this.hash + '/';
+                    const tempServer = response.address;
+                    /** @type {?} */
+                    const address = protocol + tempServer + '/' + this.hash + '/';
                     if (this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
                         this.iframeElement.nativeElement.src = address;
                     }
@@ -118,12 +116,7 @@ class NgxRumbletalkComponent {
      * @return {?}
      */
     instantiateQuery() {
-        messageInterval = setInterval((/**
-         * @return {?}
-         */
-        () => {
-            this.query();
-        }), 1000);
+        messageInterval = setInterval(this.query.bind(this), 1000);
     }
     /**
      * instantiate a postMessage connection with the chat

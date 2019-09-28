@@ -38,25 +38,7 @@
     var messageInterval;
     var NgxRumbletalkComponent = /** @class */ (function () {
         function NgxRumbletalkComponent(sanitizer) {
-            var _this = this;
             this.sanitizer = sanitizer;
-            /**
-             * handles postMessage requests
-             * @param event - the event object
-             */
-            this.info = ( /**
-             * @param {?} event
-             * @return {?}
-             */function (event) {
-                if (isFinite(event.data)) {
-                    clearInterval(messageInterval);
-                }
-                else if (typeof event.data === 'object') {
-                    if (event.data.reload) {
-                        _this.reload();
-                    }
-                }
-            });
         }
         Object.defineProperty(NgxRumbletalkComponent.prototype, "safeSrc", {
             get: /**
@@ -89,7 +71,31 @@
          * @return {?}
          */
             function () {
-                window.addEventListener('message', this.info, false);
+                window.addEventListener('message', this.info.bind(this), false);
+            };
+        /**
+         * handles postMessage requests
+         * @param event - the event object
+         */
+        /**
+         * handles postMessage requests
+         * @param {?} event - the event object
+         * @return {?}
+         */
+        NgxRumbletalkComponent.prototype.info = /**
+         * handles postMessage requests
+         * @param {?} event - the event object
+         * @return {?}
+         */
+            function (event) {
+                if (isFinite(event.data)) {
+                    clearInterval(messageInterval);
+                }
+                else if (typeof event.data === 'object') {
+                    if (event.data.reload) {
+                        this.reload();
+                    }
+                }
             };
         /**
          * reloads the iframe (or parent page) in case of a server request
@@ -117,9 +123,10 @@
                         /** @type {?} */
                         var response = JSON.parse(xhr.responseText);
                         if (response.status) {
-                            server = response.address;
                             /** @type {?} */
-                            var address = protocol + server + '/' + _this.hash + '/';
+                            var tempServer = response.address;
+                            /** @type {?} */
+                            var address = protocol + tempServer + '/' + _this.hash + '/';
                             if (_this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
                                 _this.iframeElement.nativeElement.src = address;
                             }
@@ -147,12 +154,7 @@
          * @return {?}
          */
             function () {
-                var _this = this;
-                messageInterval = setInterval(( /**
-                 * @return {?}
-                 */function () {
-                    _this.query();
-                }), 1000);
+                messageInterval = setInterval(this.query.bind(this), 1000);
             };
         /**
          * instantiate a postMessage connection with the chat

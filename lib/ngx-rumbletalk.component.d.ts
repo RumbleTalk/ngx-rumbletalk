@@ -19,7 +19,7 @@ export declare class NgxRumbletalkComponent implements OnInit {
      * handles postMessage requests
      * @param event - the event object
      */
-    info: (event: any) => void;
+    info(event: any): void;
     /**
      * reloads the iframe (or parent page) in case of a server request
      */
