@@ -1,21 +1,42 @@
-import { DomSanitizer } from '@angular/platform-browser';
-import { Injectable, Component, Input, ChangeDetectionStrategy, ViewChild, NgModule, defineInjectable } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { Injectable, NgModule, defineInjectable, inject, Component, ChangeDetectionStrategy, ViewChild, Input } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var NgxRumbletalkService = /** @class */ (function () {
-    function NgxRumbletalkService() {
+    function NgxRumbletalkService(http) {
+        this.http = http;
     }
+    /**
+     * @param {?} hash
+     * @return {?}
+     */
+    NgxRumbletalkService.prototype.address = /**
+     * @param {?} hash
+     * @return {?}
+     */
+    function (hash) {
+        return this.http
+            .get("https://www.rumbletalk.com/client/service.php?hash=" + hash)
+            .pipe(map((/**
+         * @param {?} data
+         * @return {?}
+         */
+        function (data) { return data['address']; })));
+    };
     NgxRumbletalkService.decorators = [
         { type: Injectable, args: [{
                     providedIn: 'root'
                 },] }
     ];
     /** @nocollapse */
-    NgxRumbletalkService.ctorParameters = function () { return []; };
-    /** @nocollapse */ NgxRumbletalkService.ngInjectableDef = defineInjectable({ factory: function NgxRumbletalkService_Factory() { return new NgxRumbletalkService(); }, token: NgxRumbletalkService, providedIn: "root" });
+    NgxRumbletalkService.ctorParameters = function () { return [
+        { type: HttpClient }
+    ]; };
+    /** @nocollapse */ NgxRumbletalkService.ngInjectableDef = defineInjectable({ factory: function NgxRumbletalkService_Factory() { return new NgxRumbletalkService(inject(HttpClient)); }, token: NgxRumbletalkService, providedIn: "root" });
     return NgxRumbletalkService;
 }());
 
@@ -23,39 +44,51 @@ var NgxRumbletalkService = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+// import { DomSanitizer } from '@angular/platform-browser';
 /** @type {?} */
 var protocol = 'https://';
 /** @type {?} */
 var baseWebUrl = 'https://www.rumbletalk.com/';
 /** @type {?} */
 var serviceRelativeUrl = 'client/service.php?hash=';
+// const server = 'stagging5.rumbletalk.net:4433';
 /** @type {?} */
-var server = 'stagging5.rumbletalk.net:4433';
+var server;
 /** @type {?} */
 var messageInterval;
 var NgxRumbletalkComponent = /** @class */ (function () {
-    function NgxRumbletalkComponent(sanitizer) {
-        this.sanitizer = sanitizer;
+    // constructor(private sanitizer: DomSanitizer) {}
+    function NgxRumbletalkComponent(service) {
+        this.service = service;
     }
-    Object.defineProperty(NgxRumbletalkComponent.prototype, "safeSrc", {
-        get: /**
-         * @return {?}
-         */
-        function () {
-            return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
-        },
-        enumerable: true,
-        configurable: true
-    });
+    // get safeSrc(): any {
+    //   return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
+    // }
+    // get safeSrc(): any {
+    //   return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
+    // }
     /**
      * @return {?}
      */
-    NgxRumbletalkComponent.prototype.ngOnInit = /**
+    NgxRumbletalkComponent.prototype.ngOnInit = 
+    // get safeSrc(): any {
+    //   return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
+    // }
+    /**
      * @return {?}
      */
     function () {
-        this.addListeners();
-        this.instantiateQuery();
+        var _this = this;
+        this.service.address(this.hash).subscribe((/**
+         * @param {?} address
+         * @return {?}
+         */
+        function (address) {
+            server = address;
+            _this.iframeElement.nativeElement.src = "https://" + address + "/" + _this.hash + "/";
+            _this.addListeners();
+            _this.instantiateQuery();
+        }));
     };
     /**
      * add the event listeners based on the embed type and device
@@ -122,10 +155,9 @@ var NgxRumbletalkComponent = /** @class */ (function () {
                 /** @type {?} */
                 var response = JSON.parse(xhr.responseText);
                 if (response.status) {
+                    server = response.address;
                     /** @type {?} */
-                    var tempServer = response.address;
-                    /** @type {?} */
-                    var address = protocol + tempServer + '/' + _this.hash + '/';
+                    var address = protocol + server + '/' + _this.hash + '/';
                     if (_this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
                         _this.iframeElement.nativeElement.src = address;
                     }
@@ -207,18 +239,17 @@ var NgxRumbletalkComponent = /** @class */ (function () {
     NgxRumbletalkComponent.decorators = [
         { type: Component, args: [{
                     selector: 'ngx-rumbletalk',
-                    template: "<iframe\r\n  #iframe\r\n  allowtransparency=\"true\"\r\n  allow=\"microphone; camera\"\r\n  [src]=\"safeSrc\"\r\n  [width]=\"width\"\r\n  [height]=\"height\"\r\n></iframe>\r\n",
+                    template: "<iframe\r\n  #iframe\r\n  allowtransparency=\"true\"\r\n  allow=\"microphone; camera\"\r\n  [width]=\"width\"\r\n  [height]=\"height\"\r\n></iframe>\r\n",
                     changeDetection: ChangeDetectionStrategy.OnPush,
                     styles: ["iframe{border:0;width:100%;height:100%;background-color:transparent;overflow:hidden}"]
                 }] }
     ];
     /** @nocollapse */
     NgxRumbletalkComponent.ctorParameters = function () { return [
-        { type: DomSanitizer }
+        { type: NgxRumbletalkService }
     ]; };
     NgxRumbletalkComponent.propDecorators = {
         iframeElement: [{ type: ViewChild, args: ['iframe',] }],
-        src: [{ type: Input }],
         floating: [{ type: Input }],
         width: [{ type: Input }],
         height: [{ type: Input }],
@@ -237,7 +268,7 @@ var NgxRumbletalkModule = /** @class */ (function () {
     NgxRumbletalkModule.decorators = [
         { type: NgModule, args: [{
                     declarations: [NgxRumbletalkComponent],
-                    imports: [],
+                    imports: [HttpClientModule],
                     exports: [NgxRumbletalkComponent]
                 },] }
     ];

@@ -1,12 +1,31 @@
-import { DomSanitizer } from '@angular/platform-browser';
-import { Injectable, Component, Input, ChangeDetectionStrategy, ViewChild, NgModule, defineInjectable } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { Injectable, NgModule, defineInjectable, inject, Component, ChangeDetectionStrategy, ViewChild, Input } from '@angular/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class NgxRumbletalkService {
-    constructor() { }
+    /**
+     * @param {?} http
+     */
+    constructor(http) {
+        this.http = http;
+    }
+    /**
+     * @param {?} hash
+     * @return {?}
+     */
+    address(hash) {
+        return this.http
+            .get(`https://www.rumbletalk.com/client/service.php?hash=${hash}`)
+            .pipe(map((/**
+         * @param {?} data
+         * @return {?}
+         */
+        data => data['address'])));
+    }
 }
 NgxRumbletalkService.decorators = [
     { type: Injectable, args: [{
@@ -14,42 +33,52 @@ NgxRumbletalkService.decorators = [
             },] }
 ];
 /** @nocollapse */
-NgxRumbletalkService.ctorParameters = () => [];
-/** @nocollapse */ NgxRumbletalkService.ngInjectableDef = defineInjectable({ factory: function NgxRumbletalkService_Factory() { return new NgxRumbletalkService(); }, token: NgxRumbletalkService, providedIn: "root" });
+NgxRumbletalkService.ctorParameters = () => [
+    { type: HttpClient }
+];
+/** @nocollapse */ NgxRumbletalkService.ngInjectableDef = defineInjectable({ factory: function NgxRumbletalkService_Factory() { return new NgxRumbletalkService(inject(HttpClient)); }, token: NgxRumbletalkService, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+// import { DomSanitizer } from '@angular/platform-browser';
 /** @type {?} */
 const protocol = 'https://';
 /** @type {?} */
 const baseWebUrl = 'https://www.rumbletalk.com/';
 /** @type {?} */
 const serviceRelativeUrl = 'client/service.php?hash=';
+// const server = 'stagging5.rumbletalk.net:4433';
 /** @type {?} */
-const server = 'stagging5.rumbletalk.net:4433';
+let server;
 /** @type {?} */
-var messageInterval;
+let messageInterval;
 class NgxRumbletalkComponent {
+    // constructor(private sanitizer: DomSanitizer) {}
     /**
-     * @param {?} sanitizer
+     * @param {?} service
      */
-    constructor(sanitizer) {
-        this.sanitizer = sanitizer;
+    constructor(service) {
+        this.service = service;
     }
-    /**
-     * @return {?}
-     */
-    get safeSrc() {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
-    }
+    // get safeSrc(): any {
+    //   return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
+    // }
     /**
      * @return {?}
      */
     ngOnInit() {
-        this.addListeners();
-        this.instantiateQuery();
+        this.service.address(this.hash).subscribe((/**
+         * @param {?} address
+         * @return {?}
+         */
+        address => {
+            server = address;
+            this.iframeElement.nativeElement.src = `https://${address}/${this.hash}/`;
+            this.addListeners();
+            this.instantiateQuery();
+        }));
     }
     /**
      * add the event listeners based on the embed type and device
@@ -92,10 +121,9 @@ class NgxRumbletalkComponent {
                 /** @type {?} */
                 const response = JSON.parse(xhr.responseText);
                 if (response.status) {
+                    server = response.address;
                     /** @type {?} */
-                    const tempServer = response.address;
-                    /** @type {?} */
-                    const address = protocol + tempServer + '/' + this.hash + '/';
+                    const address = protocol + server + '/' + this.hash + '/';
                     if (this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
                         this.iframeElement.nativeElement.src = address;
                     }
@@ -153,18 +181,17 @@ class NgxRumbletalkComponent {
 NgxRumbletalkComponent.decorators = [
     { type: Component, args: [{
                 selector: 'ngx-rumbletalk',
-                template: "<iframe\r\n  #iframe\r\n  allowtransparency=\"true\"\r\n  allow=\"microphone; camera\"\r\n  [src]=\"safeSrc\"\r\n  [width]=\"width\"\r\n  [height]=\"height\"\r\n></iframe>\r\n",
+                template: "<iframe\r\n  #iframe\r\n  allowtransparency=\"true\"\r\n  allow=\"microphone; camera\"\r\n  [width]=\"width\"\r\n  [height]=\"height\"\r\n></iframe>\r\n",
                 changeDetection: ChangeDetectionStrategy.OnPush,
                 styles: ["iframe{border:0;width:100%;height:100%;background-color:transparent;overflow:hidden}"]
             }] }
 ];
 /** @nocollapse */
 NgxRumbletalkComponent.ctorParameters = () => [
-    { type: DomSanitizer }
+    { type: NgxRumbletalkService }
 ];
 NgxRumbletalkComponent.propDecorators = {
     iframeElement: [{ type: ViewChild, args: ['iframe',] }],
-    src: [{ type: Input }],
     floating: [{ type: Input }],
     width: [{ type: Input }],
     height: [{ type: Input }],
@@ -180,7 +207,7 @@ class NgxRumbletalkModule {
 NgxRumbletalkModule.decorators = [
     { type: NgModule, args: [{
                 declarations: [NgxRumbletalkComponent],
-                imports: [],
+                imports: [HttpClientModule],
                 exports: [NgxRumbletalkComponent]
             },] }
 ];
