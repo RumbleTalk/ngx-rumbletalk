@@ -27,6 +27,17 @@ var NgxRumbletalkService = /** @class */ (function () {
          */
         function (data) { return data['address']; })));
     };
+    /**
+     * @param {?} url
+     * @return {?}
+     */
+    NgxRumbletalkService.prototype.reload = /**
+     * @param {?} url
+     * @return {?}
+     */
+    function (url) {
+        return this.http.get(url);
+    };
     NgxRumbletalkService.decorators = [
         { type: Injectable, args: [{
                     providedIn: 'root'
@@ -44,37 +55,24 @@ var NgxRumbletalkService = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-// import { DomSanitizer } from '@angular/platform-browser';
 /** @type {?} */
 var protocol = 'https://';
 /** @type {?} */
 var baseWebUrl = 'https://www.rumbletalk.com/';
 /** @type {?} */
 var serviceRelativeUrl = 'client/service.php?hash=';
-// const server = 'stagging5.rumbletalk.net:4433';
 /** @type {?} */
 var server;
 /** @type {?} */
 var messageInterval;
 var NgxRumbletalkComponent = /** @class */ (function () {
-    // constructor(private sanitizer: DomSanitizer) {}
     function NgxRumbletalkComponent(service) {
         this.service = service;
     }
-    // get safeSrc(): any {
-    //   return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
-    // }
-    // get safeSrc(): any {
-    //   return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
-    // }
     /**
      * @return {?}
      */
-    NgxRumbletalkComponent.prototype.ngOnInit = 
-    // get safeSrc(): any {
-    //   return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
-    // }
-    /**
+    NgxRumbletalkComponent.prototype.ngOnInit = /**
      * @return {?}
      */
     function () {
@@ -89,6 +87,15 @@ var NgxRumbletalkComponent = /** @class */ (function () {
             _this.addListeners();
             _this.instantiateQuery();
         }));
+    };
+    /**
+     * @return {?}
+     */
+    NgxRumbletalkComponent.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        clearInterval(messageInterval);
     };
     /**
      * add the event listeners based on the embed type and device
@@ -142,36 +149,29 @@ var NgxRumbletalkComponent = /** @class */ (function () {
     function () {
         var _this = this;
         /** @type {?} */
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', baseWebUrl + serviceRelativeUrl + this.hash, true);
-        xhr.onreadystatechange = (/**
+        var url = "" + baseWebUrl + serviceRelativeUrl + this.hash;
+        this.service.reload(url).subscribe((/**
+         * @param {?} res
          * @return {?}
          */
-        function () {
-            if (xhr.readyState !== 4) {
-                return;
-            }
-            try {
+        function (res) {
+            if (res.status) {
+                server = res.address;
                 /** @type {?} */
-                var response = JSON.parse(xhr.responseText);
-                if (response.status) {
-                    server = response.address;
-                    /** @type {?} */
-                    var address = protocol + server + '/' + _this.hash + '/';
-                    if (_this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
-                        _this.iframeElement.nativeElement.src = address;
-                    }
-                    else {
-                        _this.iframeElement.nativeElement.location.href = address;
-                    }
-                    _this.instantiateQuery();
+                var address = "" + protocol + server + "/" + _this.hash + "/";
+                if (_this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
+                    _this.iframeElement.nativeElement.src = address;
                 }
+                else {
+                    _this.iframeElement.nativeElement.location.href = address;
+                }
+                _this.instantiateQuery();
             }
-            catch (e) {
-                location.reload();
-            }
-        });
-        xhr.send();
+        }), (/**
+         * @param {?} ignore
+         * @return {?}
+         */
+        function (ignore) { return location.reload(); }));
     };
     /**
      * starts [repeatedly] trying to connect to the chat using postMessage

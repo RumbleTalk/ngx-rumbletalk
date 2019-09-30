@@ -26,6 +26,13 @@ class NgxRumbletalkService {
          */
         data => data['address'])));
     }
+    /**
+     * @param {?} url
+     * @return {?}
+     */
+    reload(url) {
+        return this.http.get(url);
+    }
 }
 NgxRumbletalkService.decorators = [
     { type: Injectable, args: [{
@@ -42,29 +49,23 @@ NgxRumbletalkService.ctorParameters = () => [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-// import { DomSanitizer } from '@angular/platform-browser';
 /** @type {?} */
 const protocol = 'https://';
 /** @type {?} */
 const baseWebUrl = 'https://www.rumbletalk.com/';
 /** @type {?} */
 const serviceRelativeUrl = 'client/service.php?hash=';
-// const server = 'stagging5.rumbletalk.net:4433';
 /** @type {?} */
 let server;
 /** @type {?} */
 let messageInterval;
 class NgxRumbletalkComponent {
-    // constructor(private sanitizer: DomSanitizer) {}
     /**
      * @param {?} service
      */
     constructor(service) {
         this.service = service;
     }
-    // get safeSrc(): any {
-    //   return this.sanitizer.bypassSecurityTrustResourceUrl(this.src);
-    // }
     /**
      * @return {?}
      */
@@ -79,6 +80,12 @@ class NgxRumbletalkComponent {
             this.addListeners();
             this.instantiateQuery();
         }));
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        clearInterval(messageInterval);
     }
     /**
      * add the event listeners based on the embed type and device
@@ -108,36 +115,29 @@ class NgxRumbletalkComponent {
      */
     reload() {
         /** @type {?} */
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', baseWebUrl + serviceRelativeUrl + this.hash, true);
-        xhr.onreadystatechange = (/**
+        const url = `${baseWebUrl}${serviceRelativeUrl}${this.hash}`;
+        this.service.reload(url).subscribe((/**
+         * @param {?} res
          * @return {?}
          */
-        () => {
-            if (xhr.readyState !== 4) {
-                return;
-            }
-            try {
+        res => {
+            if (res.status) {
+                server = res.address;
                 /** @type {?} */
-                const response = JSON.parse(xhr.responseText);
-                if (response.status) {
-                    server = response.address;
-                    /** @type {?} */
-                    const address = protocol + server + '/' + this.hash + '/';
-                    if (this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
-                        this.iframeElement.nativeElement.src = address;
-                    }
-                    else {
-                        this.iframeElement.nativeElement.location.href = address;
-                    }
-                    this.instantiateQuery();
+                const address = `${protocol}${server}/${this.hash}/`;
+                if (this.iframeElement.nativeElement instanceof HTMLIFrameElement) {
+                    this.iframeElement.nativeElement.src = address;
                 }
+                else {
+                    this.iframeElement.nativeElement.location.href = address;
+                }
+                this.instantiateQuery();
             }
-            catch (e) {
-                location.reload();
-            }
-        });
-        xhr.send();
+        }), (/**
+         * @param {?} ignore
+         * @return {?}
+         */
+        ignore => location.reload()));
     }
     /**
      * starts [repeatedly] trying to connect to the chat using postMessage

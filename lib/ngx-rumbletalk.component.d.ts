@@ -1,16 +1,15 @@
-import { OnInit, ElementRef } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-export declare class NgxRumbletalkComponent implements OnInit {
-    private sanitizer;
+import { NgxRumbletalkService } from './ngx-rumbletalk.service';
+import { OnInit, OnDestroy, ElementRef } from '@angular/core';
+export declare class NgxRumbletalkComponent implements OnInit, OnDestroy {
+    private service;
     iframeElement: ElementRef;
-    src: string;
     floating: boolean;
     width: string;
     height: string;
     hash: string;
-    constructor(sanitizer: DomSanitizer);
-    readonly safeSrc: any;
+    constructor(service: NgxRumbletalkService);
     ngOnInit(): void;
+    ngOnDestroy(): void;
     /**
      * add the event listeners based on the embed type and device
      */
