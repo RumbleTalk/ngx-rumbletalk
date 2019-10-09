@@ -1,12 +1,28 @@
-import { NgxRumbletalkService } from './ngx-rumbletalk.service';
 import { OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { NgxRumbletalkService } from './ngx-rumbletalk.service';
 export declare class NgxRumbletalkComponent implements OnInit, OnDestroy {
     private service;
+    /** @const Object different embedding types */
+    readonly EMBED_TYPES: {
+        EMBEDDED: number;
+        FLOATING: number;
+        MOBILE_FULL: number;
+    };
+    readonly counterTop = 14;
+    readonly counterLeft = 23;
     iframeElement: ElementRef;
-    floating: boolean;
-    width: string;
-    height: string;
+    chatDivElement: ElementRef;
     hash: string;
+    side: number;
+    embedType: number;
+    cdn: string;
+    floating: boolean;
+    width: number;
+    height: number;
+    bounce: number;
+    image: string;
+    showDetails: boolean;
+    mobile: boolean;
     constructor(service: NgxRumbletalkService);
     ngOnInit(): void;
     ngOnDestroy(): void;
@@ -37,4 +53,20 @@ export declare class NgxRumbletalkComponent implements OnInit, OnDestroy {
      * returns boolean
      */
     validateOrigin(origin: any): boolean;
+    handleImageLoad(event: any): void;
+    /**
+     * hides or shows the floating chat
+     * @param boolean [close] - if set to true, will force hide
+     */
+    toggleFloatingChatStart(close?: boolean): void;
+    /**
+     * hide or display the floating chat by @steps
+     * @param number steps - the number of pixels to increment the display by
+     */
+    toggleFloatingChat(steps: any): void;
+    /**
+     * attaches the open chat event to the given target
+     * @param Element target
+     */
+    openChat(): void;
 }
