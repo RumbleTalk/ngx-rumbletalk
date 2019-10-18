@@ -1,0 +1,53 @@
+<div class="rumbletalk-embed" *ngIf="!floating">
+  <iframe
+    #iframe
+    frameBorder="0"
+    allow="microphone; camera"
+    allowtransparency="true"
+    [ngStyle]="{ height: height ? height + 'px' : 'auto', width: width ? width + 'px' : 'auto' }"
+  ></iframe>
+</div>
+
+<div
+  class="rumbletalk-floating"
+  [ngClass]="'rumbletalk-floating-' + side"
+  (click)="mobile ? openChat() : toggleFloatingChat()"
+  *ngIf="floating"
+>
+  <img
+    alt="Click to join the conversation"
+    title="Click to join the conversation"
+    [src]="image"
+    [ngClass]="side"
+    (load)="handleImageLoad($event)"
+  />
+
+  <div
+    class="counter-div"
+    [ngStyle]="{ top: counterTop + 'px', left: counterLeft + 'px' }"
+    *ngIf="counter !== 'false'"
+  >
+    <img alt="loading" [src]="cdn + 'images/toolbar/mini_wait.gif'" *ngIf="!mobile" />
+  </div>
+
+  <div #chatDiv [ngClass]="'chat-div chat-div-out chat-div-' + side" *ngIf="!mobile">
+    <img
+      class="close-button"
+      alt="close"
+      [src]="cdn + 'images/c.png'"
+      [ngStyle]="side === 'right' ? { left: '-8px' } : { right: '-8px' }"
+      (click)="toggleFloatingChat($event)"
+    />
+
+    <iframe
+      #iframe
+      frameBorder="0"
+      allow="microphone; camera"
+      allowtransparency="true"
+      [ngStyle]="{
+        height: height ? height + 'px' : '500px',
+        width: width ? width + 'px' : '700px'
+      }"
+    ></iframe>
+  </div>
+</div>

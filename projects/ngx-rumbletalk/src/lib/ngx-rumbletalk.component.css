@@ -1,0 +1,92 @@
+.rumbletalk-embed {
+  overflow: hidden;
+}
+
+iframe {
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.rumbletalk-floating {
+  position: fixed;
+  bottom: 5px;
+  z-index: 2147483647;
+  cursor: pointer;
+}
+
+.rumbletalk-floating-left {
+  left: 5px;
+}
+
+.rumbletalk-floating-right {
+  right: 5px;
+}
+
+.rumbletalk-floating > img {
+  max-width: none;
+  position: absolute;
+  bottom: 0;
+}
+
+.rumbletalk-floating > img.left {
+  left: 0;
+}
+
+.rumbletalk-floating > img.right {
+  right: 0;
+}
+
+.counter-div {
+  position: absolute;
+  width: 28px;
+  text-align: center;
+  font: bold 12px arial;
+  color: #000;
+  user-select: none;
+}
+
+.chat-div {
+  position: absolute;
+  overflow: hidden;
+  bottom: 75px;
+  padding: 0;
+  transition: transform 0.3s linear;
+  transform-style: preserve-3D;
+}
+
+.chat-div-left {
+  left: 0;
+  transform-origin: bottom left;
+}
+
+.chat-div-right {
+  right: 0;
+  transform-origin: bottom right;
+}
+
+.chat-div-out {
+  -webkit-transform: scale(0);
+  -ms-transform: scale(0);
+  transform: scale(0);
+}
+
+.chat-div-in {
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+}
+
+.close-button {
+  cursor: pointer;
+  position: absolute;
+  top: -9px;
+  z-index: 1000;
+}
+
+.rumbletalk-embed-image {
+  text-align: center;
+}
+
+.rumbletalk-embed-image img {
+  cursor: pointer;
+}
