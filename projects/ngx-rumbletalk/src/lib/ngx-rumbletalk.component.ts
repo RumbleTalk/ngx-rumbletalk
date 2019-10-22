@@ -24,6 +24,7 @@ let messageInterval: any;
 export class NgxRumbletalkComponent implements OnInit, OnDestroy {
   @ViewChild('iframe') iframeElement: ElementRef;
   @ViewChild('chatDiv') chatDivElement: ElementRef;
+  @ViewChild('counter') counterElement: ElementRef;
   @Input() public hash: string;
   @Input() public width: number;
   @Input() public height: number;
@@ -102,6 +103,10 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy {
   info(event) {
     if (isFinite(event.data)) {
       clearInterval(messageInterval);
+
+      if (this.counter !== 'false') {
+        this.counterElement.nativeElement.innerHTML = event.data.toString();
+      }
     } else if (typeof event.data === 'object') {
       if (event.data.reload) {
         this.reload();
