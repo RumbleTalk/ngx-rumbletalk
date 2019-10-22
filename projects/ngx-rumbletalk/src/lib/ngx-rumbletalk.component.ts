@@ -14,7 +14,6 @@ const baseWebUrl = 'https://www.rumbletalk.com/';
 const serviceRelativeUrl = 'client/service.php?hash=';
 let server: string;
 let messageInterval: any;
-let floatingToggleInterval: any;
 
 @Component({
   selector: 'ngx-rumbletalk',
