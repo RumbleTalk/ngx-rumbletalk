@@ -50,7 +50,7 @@ iframe {
   overflow: hidden;
   bottom: 75px;
   padding: 0;
-  transition: transform 0.3s linear;
+  transition: transform 0.1s linear;
   transform-style: preserve-3D;
 }
 
