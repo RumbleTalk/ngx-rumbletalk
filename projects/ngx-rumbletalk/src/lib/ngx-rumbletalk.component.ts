@@ -5,7 +5,9 @@ import {
   Input,
   ChangeDetectionStrategy,
   ViewChild,
-  ElementRef
+  ElementRef,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { NgxRumbletalkService } from './ngx-rumbletalk.service';
 
@@ -16,12 +18,12 @@ let server: string;
 let messageInterval: any;
 
 @Component({
-  selector: 'ngx-rumbletalk',
+  selector: "ngx-rumbletalk",
   templateUrl: './ngx-rumbletalk.component.html',
   styleUrls: ['./ngx-rumbletalk.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NgxRumbletalkComponent implements OnInit, OnDestroy {
+export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('iframe') iframeElement: ElementRef;
   @ViewChild('chatDiv') chatDivElement: ElementRef;
   @ViewChild('counter') counterElement: ElementRef;
@@ -30,7 +32,8 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy {
   @Input() public height: number;
   @Input() public floating = false;
   @Input() public side = 'right';
-  @Input() public image = 'https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png';
+  @Input() public image =
+    'https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png';
   @Input() public counter = 'false';
   @Input() public cdn = 'https://d1pfint8izqszg.cloudfront.net/';
 
@@ -43,7 +46,9 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const ua = navigator.userAgent.toUpperCase();
     this.mobile =
-      ua.indexOf('MOBILE') !== -1 || ua.indexOf('ANDROID') !== -1 || ua.indexOf('IOS') !== -1;
+      ua.indexOf('MOBILE') !== -1 ||
+      ua.indexOf('ANDROID') !== -1 ||
+      ua.indexOf('IOS') !== -1;
 
     if (this.floating) {
       if (!this.width) {
@@ -73,6 +78,25 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy {
       }
     }
 
+    this.loadIframe();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const hashVal = changes.hash;
+
+    if (hashVal.currentValue !== hashVal.previousValue) {
+      this.reload();
+    }
+  }
+
+  ngOnDestroy() {
+    clearInterval(messageInterval);
+  }
+
+  /**
+   * Loads the iframe
+   */
+  loadIframe(): void {
     this.service.address(this.hash).subscribe(address => {
       server = address;
 
@@ -83,10 +107,6 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy {
       this.addListeners();
       this.instantiateQuery();
     });
-  }
-
-  ngOnDestroy() {
-    clearInterval(messageInterval);
   }
 
   /**
