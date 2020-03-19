@@ -16,6 +16,7 @@ const baseWebUrl = 'https://www.rumbletalk.com/';
 const serviceRelativeUrl = 'client/service.php?hash=';
 let server: string;
 let messageInterval: any;
+declare const window: any;
 
 @Component({
   selector: "ngx-rumbletalk",
@@ -79,6 +80,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.loadIframe();
+    window.RumbleTalkChat = {};
   }
 
   ngOnChanges(changes: SimpleChanges): void {
