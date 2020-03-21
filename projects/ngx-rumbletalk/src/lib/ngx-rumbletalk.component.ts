@@ -80,7 +80,6 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.loadIframe();
-    window.RumbleTalkChat = {};
   }
 
   ngOnChanges(changes: SimpleChanges): void {
