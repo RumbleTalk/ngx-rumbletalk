@@ -1,5 +1,5 @@
 <div class="rumbletalk-embed" [style.width.px]="width" [style.height.px]="height" *ngIf="!floating">
-  <iframe #iframe frameBorder="0" allow="microphone; camera" allowtransparency="true"></iframe>
+  <iframe #iframe frameBorder="0" allow="microphone; camera" allowtransparency="true" (load)="handleIframeLoad()"></iframe>
 </div>
 
 <div
@@ -43,6 +43,11 @@
         height: height ? height + 'px' : '500px',
         width: width ? width + 'px' : '700px'
       }"
+      (load)="handleIframeLoad()"
     ></iframe>
   </div>
 </div>
+
+<input type="text" [(ngModel)]="username">
+<input type="text" [(ngModel)]="password">
+<button (click)="handleLogin()">Login</button>
