@@ -7,6 +7,20 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class NgxRumbletalkService {
+  public iframe: HTMLIFrameElement;
+  public iframeHasLoaded: boolean;
+  public server: string;
+
+  readonly baseURL = 'https://connect2.rumbletalk.net/v1/?';
+  readonly postMessageEvents: any = {
+    LOGOUT_CB: 'pm.1',
+    LOGOUT_CB_RECEIVED: 'pm.2',
+    LOGIN: 'pm.3',
+    LOGIN_SUCCESS: 'pm.4',
+    LOGIN_ALREADY_LOGGED_IN: 'pm.5',
+    LOGOUT: 'pm.6'
+};
+
   constructor(private http: HttpClient) {}
 
   address(hash: string): Observable<string> {
@@ -19,25 +33,122 @@ export class NgxRumbletalkService {
     return this.http.get<any>(url);
   }
 
-  login(data: any) {}
+  login(data: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      console.log('this', this);
+      const message: any = {};
+
+      /* handle username value */
+      message.username = this.trim(data.username);
+      if (!this.validateUsername(message.username)) {
+        reject('Error: invalid username in "login" function');
+      }
+
+      /* handle, if set, password value */
+      if (data.password) {
+        if (!this.validatePassword(data.password)) {
+          reject('Error: invalid password in "login" function');
+        }
+        message.password = data.password;
+      }
+
+      /* handle, if set, image URL */
+      if (data.image) {
+        if (!this.validateUrl(data.image)) {
+          reject('Error: invalid image in "login" function');
+        }
+        message.image = data.image;
+      }
+
+      message.type = this.postMessageEvents.LOGIN;
+      message.hash = data.hash;
+      message.forceLogin = data.forceLogin;
+
+      /* if the chat target is available, use post message option */
+      if (this.iframeHasLoaded) {
+        /* keep sending the data to the chat until the chat responds */
+        const intervalHandle = setInterval(() => {
+          this.postMessage(message);
+        }, 1000);
+
+        window.addEventListener(
+          'message',
+          function handlePostMessage(event) {
+            /* validates the origin to be from a chat */
+            if (!this.validateChatOrigin(event.origin)) {
+              reject('Error: invalid origin in "login" function');
+            }
+
+            console.log('event', event);
+
+            if (typeof event.data !== 'object') {
+              reject(`Error: invalid data received in RumbleTalk SDK: ${event.data}`);
+            }
+
+            /* different chat callback */
+            if (event.data.hash !== data.hash) {
+              reject('Error: chat hash mismatch');
+            }
+
+            /* validate that the message is of a successful login of the specific chat */
+            if (
+              event.data.type === this.postMessageEvents.LOGIN_SUCCESS ||
+              event.data.type === this.postMessageEvents.LOGIN_ALREADY_LOGGED_IN
+            ) {
+              resolve({
+                status: event.data.type,
+                message: event.data.type === this.postMessageEvents.LOGIN_SUCCESS
+                    ? 'success'
+                    : 'already logged in'
+              });
+
+              clearInterval(intervalHandle);
+              window.removeEventListener('message', handlePostMessage);
+            }
+          }.bind(this),
+          false
+        );
+      } else {
+        const connectImage = new Image();
+        connectImage.src = `${this.baseURL}a=${encodeURIComponent(JSON.stringify(message))}`;
+      }
+    });
+  }
 
   logout(data: any) {}
 
   logoutCB(data: any) {}
 
-  private trim(str: string): string {
+  trim(str: string): string {
     return str.replace(/^\s+|\s+$/g, '');
   }
 
-  private validateUsername(username: string): boolean {
+  validateUsername(username: string): boolean {
     return !/^-?\d+$/.test(username) && username.length < 64;
   }
 
-  private validatePassword(password: string): boolean {
+  validatePassword(password: string): boolean {
     return 0 < password.length && password.length < 51;
   }
 
-  private validateUrl(url: string): boolean {
+  validateUrl(url: string): boolean {
     return /(https?:)?\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(url);
+  }
+
+  /**
+   * checks if the given origin is of a chat service
+   * @param origin - the URL of the origin
+   * returns boolean
+   */
+  validateChatOrigin(origin): boolean {
+    return /^https:\/\/.+\.rumbletalk\.(net|com)(:4433)?$/.test(origin);
+  }
+
+  postMessage(data) {
+    try {
+      this.iframe.contentWindow.postMessage(data, this.server);
+    } catch (error) {
+      console.log(error.name, error.message);
+    }
   }
 }
