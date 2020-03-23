@@ -37,6 +37,8 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
     'https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png';
   @Input() public counter = 'false';
   @Input() public cdn = 'https://d1pfint8izqszg.cloudfront.net/';
+  public username: string;
+  public password: string;
 
   mobile: boolean;
   counterTop = 14;
@@ -168,7 +170,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /**
-   * instantiate a postMessage connection with the chat
+   * instantiate a postppMessage connection with the chat
    */
   query() {
     try {
@@ -253,5 +255,23 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
         }
       }, 100);
     }
+  }
+
+  handleIframeLoad(): void {
+    this.service.iframe = this.iframeElement.nativeElement;
+    this.service.iframeHasLoaded = true;
+    this.service.server = server;
+  }
+
+  handleLogin(): void {
+    const data = {
+      hash: this.hash,
+      username: this.username,
+      password: this.password,
+      image: ''
+    };
+    this.service.login(data).then(data => {
+      console.log('response', data);
+    }).catch(err => console.log(err));
   }
 }
