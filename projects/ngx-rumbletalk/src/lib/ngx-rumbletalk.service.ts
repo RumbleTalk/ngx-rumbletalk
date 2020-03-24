@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { LoginData } from './interface/login-data';
+import { LogoutData } from './interface/logout-data';
 declare const window: any;
 
 @Injectable({
@@ -34,7 +37,7 @@ export class NgxRumbletalkService {
     return this.http.get<any>(url);
   }
 
-  login(data: any): Promise<any> {
+  login(data: LoginData): Promise<any> {
     return new Promise((resolve, reject) => {
       const message: any = {};
 
@@ -93,15 +96,15 @@ export class NgxRumbletalkService {
               event.data.type === this.postMessageEvents.LOGIN_SUCCESS ||
               event.data.type === this.postMessageEvents.LOGIN_ALREADY_LOGGED_IN
             ) {
+              clearInterval(intervalHandle);
+              window.removeEventListener('message', handlePostMessage);
+
               resolve({
                 status: event.data.type,
                 message: event.data.type === this.postMessageEvents.LOGIN_SUCCESS
                     ? 'success'
                     : 'already logged in'
               });
-
-              clearInterval(intervalHandle);
-              window.removeEventListener('message', handlePostMessage);
             }
           }.bind(this),
           false
@@ -113,9 +116,40 @@ export class NgxRumbletalkService {
     });
   }
 
-  logout(data: any) {}
+  logout(data: LogoutData) {
+    const message: any = {
+      type: this.postMessageEvents.LOGOUT,
+      hash: data.hash
+    };
+
+    if (data.userId) {
+      message.userId = data.userId;
+    }
+
+    if (data.username) {
+      message.username = data.username;
+    }
+
+    if (this.iframeHasLoaded) {
+      this.postMessage(message);
+    } else {
+      const connectImage = new Image();
+      connectImage.src = `${this.baseURL}a=${encodeURIComponent(JSON.stringify(message))}`;
+    }
+  }
 
   logoutCB(data: any) {}
+
+  postMessage(data) {
+    try {
+      const target = this.iframe instanceof HTMLIFrameElement
+        ? this.iframe.contentWindow
+        : this.iframe;
+      target.postMessage(data, `https://${this.server}`);
+    } catch (error) {
+      console.log(error.name, error.message);
+    }
+  }
 
   trim(str: string): string {
     return str.replace(/^\s+|\s+$/g, '');
@@ -140,16 +174,5 @@ export class NgxRumbletalkService {
    */
   validateChatOrigin(origin): boolean {
     return /^https:\/\/.+\.rumbletalk\.(net|com)(:4433)?$/.test(origin);
-  }
-
-  postMessage(data) {
-    try {
-      const target = this.iframe instanceof HTMLIFrameElement
-        ? this.iframe.contentWindow
-        : this.iframe;
-      target.postMessage(data, `https://${this.server}`);
-    } catch (error) {
-      console.log(error.name, error.message);
-    }
   }
 }

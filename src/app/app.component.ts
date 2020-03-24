@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  hash = 'PF6nuAsv';
+  hash = '43!kD2BT';
   title = 'ngx-rumbletalk-app';
 }

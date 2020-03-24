@@ -10,6 +10,8 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { NgxRumbletalkService } from './ngx-rumbletalk.service';
+import { LoginData } from './interface/login-data';
+import { LogoutData } from './interface/logout-data';
 
 const protocol = 'https://';
 const baseWebUrl = 'https://www.rumbletalk.com/';
@@ -264,7 +266,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   handleLogin(): void {
-    const data = {
+    const data: LoginData = {
       hash: this.hash,
       username: this.username,
       password: this.password,
@@ -273,5 +275,13 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
     this.service.login(data).then(data => {
       console.log('response', data);
     }).catch(err => console.log(err));
+  }
+
+  handleLogout(): void {
+    const data: LogoutData = {
+      hash: this.hash,
+      username: this.username
+    };
+    this.service.logout(data);
   }
 }
