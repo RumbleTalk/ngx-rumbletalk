@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { LoginData } from './interface/login-data';
 import { LogoutData } from './interface/logout-data';
+import { LogoutCbData } from './interface/logout-cb-data';
 declare const window: any;
 
 @Injectable({
@@ -138,7 +139,60 @@ export class NgxRumbletalkService {
     }
   }
 
-  logoutCB(data: any) {}
+  logoutCB(data: LogoutCbData) {
+    console.log('logoutCB data', data);
+
+    if (!this.iframeHasLoaded) {
+      console.log('should not go in here');
+
+      setTimeout(() => {
+        this.logoutCB(data);
+      }, 1000);
+
+      return;
+    }
+
+    const intervalHandle = setInterval(() => {
+      this.postMessage({type: this.postMessageEvents.LOGOUT_CB});
+    }, 1000);
+
+    window.addEventListener('message', event => {
+      console.log('event', event);
+      /* validates the origin to be from a chat */
+      if (!this.validateChatOrigin(event.origin)) {
+        console.log('validateChatOrigin');
+        return;
+      }
+
+      /* expecting an object */
+      if (typeof event.data !== 'object') {
+        console.log('not object');
+        return;
+      }
+
+      /* different chat callback */
+      if (event.data.hash !== data.hash) {
+        console.log('hash mismatch', event.data.hash);
+        return;
+      }
+
+      /* callback registered */
+      if (event.data.type === this.postMessageEvents.LOGOUT_CB_RECEIVED) {
+        clearInterval(intervalHandle);
+        console.log('clear interval');
+        return;
+      }
+
+      /* validate event type */
+      if (event.data.type !== this.postMessageEvents.LOGOUT_CB) {
+        console.log('invalid event type', event.data.type);
+        return;
+      }
+
+      console.log('success');
+      data.callback(event.data.reason);
+    }, false);
+  }
 
   postMessage(data) {
     try {

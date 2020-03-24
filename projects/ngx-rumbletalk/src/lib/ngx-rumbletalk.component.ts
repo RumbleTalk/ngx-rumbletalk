@@ -12,6 +12,7 @@ import {
 import { NgxRumbletalkService } from './ngx-rumbletalk.service';
 import { LoginData } from './interface/login-data';
 import { LogoutData } from './interface/logout-data';
+import { LogoutCbData } from './interface/logout-cb-data';
 
 const protocol = 'https://';
 const baseWebUrl = 'https://www.rumbletalk.com/';
@@ -283,5 +284,15 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
       username: this.username
     };
     this.service.logout(data);
+  }
+
+  handleLogoutCB(): void {
+    const data: LogoutCbData = {
+      hash: this.hash,
+      callback: reason => {
+        console.log('handleLogoutCB', reason);
+      }
+    };
+    this.service.logoutCB(data);
   }
 }
