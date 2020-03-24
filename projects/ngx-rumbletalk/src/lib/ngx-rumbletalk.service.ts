@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+declare const window: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class NgxRumbletalkService {
-  public iframe: HTMLIFrameElement;
+  public iframe: any;
   public iframeHasLoaded: boolean;
   public server: string;
 
@@ -35,7 +36,6 @@ export class NgxRumbletalkService {
 
   login(data: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      console.log('this', this);
       const message: any = {};
 
       /* handle username value */
@@ -78,8 +78,6 @@ export class NgxRumbletalkService {
             if (!this.validateChatOrigin(event.origin)) {
               reject('Error: invalid origin in "login" function');
             }
-
-            console.log('event', event);
 
             if (typeof event.data !== 'object') {
               reject(`Error: invalid data received in RumbleTalk SDK: ${event.data}`);
@@ -146,7 +144,10 @@ export class NgxRumbletalkService {
 
   postMessage(data) {
     try {
-      this.iframe.contentWindow.postMessage(data, this.server);
+      const target = this.iframe instanceof HTMLIFrameElement
+        ? this.iframe.contentWindow
+        : this.iframe;
+      target.postMessage(data, `https://${this.server}`);
     } catch (error) {
       console.log(error.name, error.message);
     }
