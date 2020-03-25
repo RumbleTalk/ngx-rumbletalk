@@ -117,7 +117,7 @@ export class NgxRumbletalkService {
     });
   }
 
-  logout(data: LogoutData) {
+  logout(data: LogoutData): void {
     const message: any = {
       type: this.postMessageEvents.LOGOUT,
       hash: data.hash
@@ -139,12 +139,10 @@ export class NgxRumbletalkService {
     }
   }
 
-  logoutCB(data: LogoutCbData) {
+  logoutCB(data: LogoutCbData): void {
     console.log('logoutCB data', data);
 
     if (!this.iframeHasLoaded) {
-      console.log('should not go in here');
-
       setTimeout(() => {
         this.logoutCB(data);
       }, 1000);
@@ -160,7 +158,6 @@ export class NgxRumbletalkService {
       console.log('event', event);
       /* validates the origin to be from a chat */
       if (!this.validateChatOrigin(event.origin)) {
-        console.log('validateChatOrigin');
         return;
       }
 
@@ -172,7 +169,6 @@ export class NgxRumbletalkService {
 
       /* different chat callback */
       if (event.data.hash !== data.hash) {
-        console.log('hash mismatch', event.data.hash);
         return;
       }
 

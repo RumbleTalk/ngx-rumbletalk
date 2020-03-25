@@ -22,7 +22,7 @@ let messageInterval: any;
 declare const window: any;
 
 @Component({
-  selector: "ngx-rumbletalk",
+  selector: 'ngx-rumbletalk',
   templateUrl: './ngx-rumbletalk.component.html',
   styleUrls: ['./ngx-rumbletalk.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -273,8 +273,8 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
       password: this.password,
       image: ''
     };
-    this.service.login(data).then(data => {
-      console.log('response', data);
+    this.service.login(data).then(res => {
+      console.log('response', res);
     }).catch(err => console.log(err));
   }
 
