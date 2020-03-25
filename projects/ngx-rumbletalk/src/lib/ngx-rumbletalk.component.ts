@@ -10,9 +10,9 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { NgxRumbletalkService } from './ngx-rumbletalk.service';
-import { LoginData } from './interface/login-data';
-import { LogoutData } from './interface/logout-data';
-import { LogoutCbData } from './interface/logout-cb-data';
+// import { LoginData } from './interface/login-data';
+// import { LogoutData } from './interface/logout-data';
+// import { LogoutCbData } from './interface/logout-cb-data';
 
 const protocol = 'https://';
 const baseWebUrl = 'https://www.rumbletalk.com/';
@@ -266,33 +266,33 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
     this.service.server = server;
   }
 
-  handleLogin(): void {
-    const data: LoginData = {
-      hash: this.hash,
-      username: this.username,
-      password: this.password,
-      image: ''
-    };
-    this.service.login(data).then(res => {
-      console.log('response', res);
-    }).catch(err => console.log(err));
-  }
+  // handleLogin(): void {
+  //   const data: LoginData = {
+  //     hash: this.hash,
+  //     username: this.username,
+  //     password: this.password,
+  //     image: ''
+  //   };
+  //   this.service.login(data).then(res => {
+  //     console.log('response', res);
+  //   }).catch(err => console.log(err));
+  // }
 
-  handleLogout(): void {
-    const data: LogoutData = {
-      hash: this.hash,
-      username: this.username
-    };
-    this.service.logout(data);
-  }
+  // handleLogout(): void {
+  //   const data: LogoutData = {
+  //     hash: this.hash,
+  //     username: this.username
+  //   };
+  //   this.service.logout(data);
+  // }
 
-  handleLogoutCB(): void {
-    const data: LogoutCbData = {
-      hash: this.hash,
-      callback: reason => {
-        console.log('handleLogoutCB', reason);
-      }
-    };
-    this.service.logoutCB(data);
-  }
+  // handleLogoutCB(): void {
+  //   const data: LogoutCbData = {
+  //     hash: this.hash,
+  //     callback: reason => {
+  //       console.log('handleLogoutCB', reason);
+  //     }
+  //   };
+  //   this.service.logoutCB(data);
+  // }
 }
