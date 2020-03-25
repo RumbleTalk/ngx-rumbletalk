@@ -8,9 +8,7 @@ import { LogoutData } from './interface/logout-data';
 import { LogoutCbData } from './interface/logout-cb-data';
 declare const window: any;
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class NgxRumbletalkService {
   public iframe: any;
   public iframeHasLoaded: boolean;
