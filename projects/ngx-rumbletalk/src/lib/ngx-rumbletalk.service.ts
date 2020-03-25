@@ -138,8 +138,6 @@ export class NgxRumbletalkService {
   }
 
   logoutCB(data: LogoutCbData): void {
-    console.log('logoutCB data', data);
-
     if (!this.iframeHasLoaded) {
       setTimeout(() => {
         this.logoutCB(data);
@@ -153,7 +151,6 @@ export class NgxRumbletalkService {
     }, 1000);
 
     window.addEventListener('message', event => {
-      console.log('event', event);
       /* validates the origin to be from a chat */
       if (!this.validateChatOrigin(event.origin)) {
         return;
@@ -161,7 +158,6 @@ export class NgxRumbletalkService {
 
       /* expecting an object */
       if (typeof event.data !== 'object') {
-        console.log('not object');
         return;
       }
 
@@ -173,17 +169,14 @@ export class NgxRumbletalkService {
       /* callback registered */
       if (event.data.type === this.postMessageEvents.LOGOUT_CB_RECEIVED) {
         clearInterval(intervalHandle);
-        console.log('clear interval');
         return;
       }
 
       /* validate event type */
       if (event.data.type !== this.postMessageEvents.LOGOUT_CB) {
-        console.log('invalid event type', event.data.type);
         return;
       }
 
-      console.log('success');
       data.callback(event.data.reason);
     }, false);
   }
