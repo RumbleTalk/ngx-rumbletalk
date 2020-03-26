@@ -1,27 +1,111 @@
-# NgxRumbletalkApp
+# NgxRumbletalk
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.7.
+An angular library for Rumbletalk chat users
 
-## Development server
+## Installation
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Using npm:
 
-## Code scaffolding
+`npm i ngx-rumbletalk`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Setup
 
-## Build
+**Import** `NgxRumbletalkModule` to your application's module
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```typescript
+import { NgxRumbletalkModule } from 'ngx-rumbletalk';
 
-## Running unit tests
+@NgModule({
+  ...
+  imports: [ NgxRumbletalkModule ],
+  ...
+})
+export class AppModule { }
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Component usage
 
-## Running end-to-end tests
+Use this in any of your `html` file where you would like to place the chat
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+### Basic use
+```typescript
+<ngx-rumbletalk [hash]="hash" [width]="700" [height]="500"></ngx-rumbletalk>
+```
 
-## Further help
+### Floating
+```typescript
+<ngx-rumbletalk [hash]="hash" [floating]="true" [side]="'right'"></ngx-rumbletalk>
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+| Option            | Type                           | Default                       | Description
+| ----------------- | ------------------------------ | ----------------------------- | -------------------------------------------------------------------------------------------- |
+| hash              | string                         |                               | The hash string which defines the chat to be loaded
+| width             | number                         | **700** if *floating* is true | Size of the width of the chat in pixels
+| height            | number                         | **500** if *floating* is true | Size of the height of the chat in pexels
+| floating          | boolean                        | false                         | Displays the chat in a floating manner or else it is fixed
+| side              | string                         | right                         | Sets which side of the window will the floating chat be displayed, can only be either 'left' or 'right'. Effect can only be seen if *floating* is set to *true*
+
+## Service usage
+
+These are the available methods you can use in the chat by importing the `NgxRumbleTalkService` file
+
+> Note: Don't forget to import the service and interfaces `import { LoginData, LogoutData, LogoutCbData, NgxRumbletalkService } from 'ngx-rumbletalk';` in the file you are working on and inject it in your class constructor `constructor(private rumbletalkService: NgxRumbletalkService) {}`
+
+### Methods
+
+#### login(data: LoginData): Promise<any>
+
+```typescript
+this.rumbletalkService.login(data).then(response => console.log(response)).catch(error => console.log(error));
+```
+
+Use to login to your chat
+
+#### logout(data: LogoutData): void
+
+```typescript
+this.rumbletalkService.logout(data);
+```
+
+Use to logout from your chat
+
+#### logoutCB(data: LogoutCbData): void
+
+```typescript
+this.service.logoutCB(data);
+```
+
+Use to logout from your chat but with callback that you can use for whatever purpose
+
+## Interface
+
+### LoginData
+
+```typescript
+export interface LoginData {
+  hash: string;
+  username: string;
+  password?: string;
+  image?: string;
+  forceLogin?: boolean;
+}
+```
+
+### LogoutData
+
+```typescript
+export interface LogoutData {
+  hash: string;
+  userId?: string;
+  username?: string;
+}
+```
+
+### LogoutCbData
+
+```typescript
+export interface LogoutCbData {
+  hash: string;
+  callback: any;
+}
+```
