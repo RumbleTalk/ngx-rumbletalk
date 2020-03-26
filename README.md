@@ -72,7 +72,7 @@ Use to logout from your chat
 #### logoutCB(data: LogoutCbData): void
 
 ```typescript
-this.service.logoutCB(data);
+this.rumbletalkService.logoutCB(data);
 ```
 
 Use to logout from your chat but with callback that you can use for whatever purpose
