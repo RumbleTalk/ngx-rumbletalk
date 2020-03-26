@@ -10,9 +10,6 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { NgxRumbletalkService } from './ngx-rumbletalk.service';
-// import { LoginData } from './interface/login-data';
-// import { LogoutData } from './interface/logout-data';
-// import { LogoutCbData } from './interface/logout-cb-data';
 
 const protocol = 'https://';
 const baseWebUrl = 'https://www.rumbletalk.com/';
@@ -40,8 +37,6 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
     'https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png';
   @Input() public counter = 'false';
   @Input() public cdn = 'https://d1pfint8izqszg.cloudfront.net/';
-  public username: string;
-  public password: string;
 
   mobile: boolean;
   counterTop = 14;
@@ -265,34 +260,4 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
     this.service.iframeHasLoaded = true;
     this.service.server = server;
   }
-
-  // handleLogin(): void {
-  //   const data: LoginData = {
-  //     hash: this.hash,
-  //     username: this.username,
-  //     password: this.password,
-  //     image: ''
-  //   };
-  //   this.service.login(data).then(res => {
-  //     console.log('response', res);
-  //   }).catch(err => console.log(err));
-  // }
-
-  // handleLogout(): void {
-  //   const data: LogoutData = {
-  //     hash: this.hash,
-  //     username: this.username
-  //   };
-  //   this.service.logout(data);
-  // }
-
-  // handleLogoutCB(): void {
-  //   const data: LogoutCbData = {
-  //     hash: this.hash,
-  //     callback: reason => {
-  //       console.log('handleLogoutCB', reason);
-  //     }
-  //   };
-  //   this.service.logoutCB(data);
-  // }
 }
