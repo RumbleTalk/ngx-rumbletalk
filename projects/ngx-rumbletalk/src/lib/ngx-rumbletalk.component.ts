@@ -33,12 +33,11 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public height: number;
   @Input() public floating = false;
   @Input() public side = 'right';
-  @Input() public image =
-    'https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png';
-  @Input() public counter = 'false';
-  @Input() public cdn = 'https://d1pfint8izqszg.cloudfront.net/';
 
   mobile: boolean;
+  image = 'https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png';
+  cdn = 'https://d1pfint8izqszg.cloudfront.net/';
+  counter = 'false';
   counterTop = 14;
   counterLeft = 23;
 
@@ -256,8 +255,10 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   handleIframeLoad(): void {
-    this.service.iframe = this.iframeElement.nativeElement;
-    this.service.iframeHasLoaded = true;
-    this.service.server = server;
+    this.service.handleResolve({iframe: this.iframeElement.nativeElement, server});
+  }
+
+  handleIframeError(): void {
+    this.service.handleReject('Iframe could not be loaded');
   }
 }

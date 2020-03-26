@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -9,12 +9,14 @@ import { LogoutCbData } from './interface/logout-cb-data';
 declare const window: any;
 
 @Injectable()
-export class NgxRumbletalkService {
-  public iframe: any;
-  public iframeHasLoaded: boolean;
-  public server: string;
+export class NgxRumbletalkService implements OnInit {
+  public handleResolve: any;
+  public handleReject: any;
+  public iframeLoaded = new Promise((resolve, reject) => {
+    this.handleResolve = resolve;
+    this.handleReject = reject;
+  });
 
-  readonly baseURL = 'https://connect2.rumbletalk.net/v1/?';
   readonly postMessageEvents: any = {
     LOGOUT_CB: 'pm.1',
     LOGOUT_CB_RECEIVED: 'pm.2',
@@ -25,6 +27,13 @@ export class NgxRumbletalkService {
 };
 
   constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    // this.iframeLoaded = new Promise((resolve, reject) => {
+    //   this.handleResolve = resolve;
+    //   this.handleReject = reject;
+    // });
+  }
 
   address(hash: string): Observable<string> {
     return this.http
@@ -67,10 +76,11 @@ export class NgxRumbletalkService {
       message.forceLogin = data.forceLogin;
 
       /* if the chat target is available, use post message option */
-      if (this.iframeHasLoaded) {
+      this.iframeLoaded.then(res => {
+
         /* keep sending the data to the chat until the chat responds */
         const intervalHandle = setInterval(() => {
-          this.postMessage(message);
+          this.postMessage(message, res);
         }, 1000);
 
         window.addEventListener(
@@ -108,10 +118,7 @@ export class NgxRumbletalkService {
           }.bind(this),
           false
         );
-      } else {
-        const connectImage = new Image();
-        connectImage.src = `${this.baseURL}a=${encodeURIComponent(JSON.stringify(message))}`;
-      }
+      }).catch(err => console.log(err));
     });
   }
 
@@ -129,64 +136,62 @@ export class NgxRumbletalkService {
       message.username = data.username;
     }
 
-    if (this.iframeHasLoaded) {
-      this.postMessage(message);
-    } else {
-      const connectImage = new Image();
-      connectImage.src = `${this.baseURL}a=${encodeURIComponent(JSON.stringify(message))}`;
-    }
+    this.iframeLoaded.then(res => {
+      this.postMessage(message, res);
+    }).catch(err => console.log(err));
   }
 
   logoutCB(data: LogoutCbData): void {
-    if (!this.iframeHasLoaded) {
+    this.iframeLoaded.then(res => {
+      console.log('res', res);
+
+      const intervalHandle = setInterval(() => {
+        this.postMessage({type: this.postMessageEvents.LOGOUT_CB}, res);
+      }, 1000);
+
+      window.addEventListener('message', event => {
+        /* validates the origin to be from a chat */
+        if (!this.validateChatOrigin(event.origin)) {
+          return;
+        }
+
+        /* expecting an object */
+        if (typeof event.data !== 'object') {
+          return;
+        }
+
+        /* different chat callback */
+        if (event.data.hash !== data.hash) {
+          return;
+        }
+
+        /* callback registered */
+        if (event.data.type === this.postMessageEvents.LOGOUT_CB_RECEIVED) {
+          clearInterval(intervalHandle);
+          return;
+        }
+
+        /* validate event type */
+        if (event.data.type !== this.postMessageEvents.LOGOUT_CB) {
+          return;
+        }
+
+        data.callback(event.data.reason);
+      }, false);
+    }).catch(ignore => {
       setTimeout(() => {
         this.logoutCB(data);
       }, 1000);
-
       return;
-    }
-
-    const intervalHandle = setInterval(() => {
-      this.postMessage({type: this.postMessageEvents.LOGOUT_CB});
-    }, 1000);
-
-    window.addEventListener('message', event => {
-      /* validates the origin to be from a chat */
-      if (!this.validateChatOrigin(event.origin)) {
-        return;
-      }
-
-      /* expecting an object */
-      if (typeof event.data !== 'object') {
-        return;
-      }
-
-      /* different chat callback */
-      if (event.data.hash !== data.hash) {
-        return;
-      }
-
-      /* callback registered */
-      if (event.data.type === this.postMessageEvents.LOGOUT_CB_RECEIVED) {
-        clearInterval(intervalHandle);
-        return;
-      }
-
-      /* validate event type */
-      if (event.data.type !== this.postMessageEvents.LOGOUT_CB) {
-        return;
-      }
-
-      data.callback(event.data.reason);
-    }, false);
+    });
   }
 
-  postMessage(data) {
+  postMessage(data, res) {
     try {
-      const target = this.iframe instanceof HTMLIFrameElement
-        ? this.iframe.contentWindow
-        : this.iframe;
-      target.postMessage(data, `https://${this.server}`);
+      const target = res.iframe instanceof HTMLIFrameElement
+        ? res.iframe.contentWindow
+        : res.iframe;
+      target.postMessage(data, `https://${res.server}`);
     } catch (error) {
       console.log(error.name, error.message);
     }
