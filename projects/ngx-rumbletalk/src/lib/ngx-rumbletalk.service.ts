@@ -9,9 +9,11 @@ import { LogoutCbData } from './interface/logout-cb-data';
 declare const window: any;
 
 @Injectable()
-export class NgxRumbletalkService implements OnInit {
-  public handleResolve: any;
-  public handleReject: any;
+export class NgxRumbletalkService {
+  public iframe: any;
+  public server: string;
+  public handleResolve;
+  public handleReject;
   public iframeLoaded = new Promise((resolve, reject) => {
     this.handleResolve = resolve;
     this.handleReject = reject;
@@ -27,13 +29,6 @@ export class NgxRumbletalkService implements OnInit {
 };
 
   constructor(private http: HttpClient) {}
-
-  ngOnInit(): void {
-    // this.iframeLoaded = new Promise((resolve, reject) => {
-    //   this.handleResolve = resolve;
-    //   this.handleReject = reject;
-    // });
-  }
 
   address(hash: string): Observable<string> {
     return this.http
@@ -76,11 +71,10 @@ export class NgxRumbletalkService implements OnInit {
       message.forceLogin = data.forceLogin;
 
       /* if the chat target is available, use post message option */
-      this.iframeLoaded.then(res => {
-
+      this.iframeLoaded.then(() => {
         /* keep sending the data to the chat until the chat responds */
         const intervalHandle = setInterval(() => {
-          this.postMessage(message, res);
+          this.postMessage(message);
         }, 1000);
 
         window.addEventListener(
@@ -136,17 +130,15 @@ export class NgxRumbletalkService implements OnInit {
       message.username = data.username;
     }
 
-    this.iframeLoaded.then(res => {
-      this.postMessage(message, res);
+    this.iframeLoaded.then(() => {
+      this.postMessage(message);
     }).catch(err => console.log(err));
   }
 
   logoutCB(data: LogoutCbData): void {
-    this.iframeLoaded.then(res => {
-      console.log('res', res);
-
+    this.iframeLoaded.then(() => {
       const intervalHandle = setInterval(() => {
-        this.postMessage({type: this.postMessageEvents.LOGOUT_CB}, res);
+        this.postMessage({type: this.postMessageEvents.LOGOUT_CB});
       }, 1000);
 
       window.addEventListener('message', event => {
@@ -186,12 +178,12 @@ export class NgxRumbletalkService implements OnInit {
     });
   }
 
-  postMessage(data, res) {
+  postMessage(data) {
     try {
-      const target = res.iframe instanceof HTMLIFrameElement
-        ? res.iframe.contentWindow
-        : res.iframe;
-      target.postMessage(data, `https://${res.server}`);
+      const target = this.iframe instanceof HTMLIFrameElement
+        ? this.iframe.contentWindow
+        : this.iframe;
+      target.postMessage(data, `https://${this.server}`);
     } catch (error) {
       console.log(error.name, error.message);
     }
