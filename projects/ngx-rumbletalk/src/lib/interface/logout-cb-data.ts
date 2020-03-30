@@ -1,4 +1,4 @@
 export interface LogoutCbData {
   hash: string;
-  callback: any;
+  callback: (reason: string) => void;
 }
