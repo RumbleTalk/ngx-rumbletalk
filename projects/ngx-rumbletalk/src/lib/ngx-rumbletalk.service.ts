@@ -82,11 +82,11 @@ export class NgxRumbletalkService {
           function handlePostMessage(event) {
             /* validates the origin to be from a chat */
             if (!this.validateChatOrigin(event.origin)) {
-              reject('Error: invalid origin in "login" function');
+              console.log('Error: invalid origin in "login" function');
             }
 
             if (typeof event.data !== 'object') {
-              reject(`Error: invalid data received in RumbleTalk SDK: ${event.data}`);
+              console.log(`Error: invalid data received in RumbleTalk SDK: ${event.data}`);
             }
 
             /* different chat callback */
