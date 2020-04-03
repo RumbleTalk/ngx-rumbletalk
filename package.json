@@ -2,6 +2,7 @@
     "name": "ngx-rumbletalk-app",
     "version": "0.0.0",
     "scripts": {
+        "preinstall": "npx npm-force-resolutions",
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
@@ -20,6 +21,7 @@
         "@angular/platform-browser-dynamic": "~7.2.0",
         "@angular/router": "~7.2.0",
         "core-js": "^2.5.4",
+        "npm-force-resolutions": "0.0.3",
         "rxjs": "~6.3.3",
         "tslib": "^1.9.0",
         "zone.js": "~0.8.26"
@@ -50,6 +52,7 @@
         "typescript": "~3.2.2"
     },
     "resolutions": {
-        "serialize-javascript": "^2.1.1"
+        "serialize-javascript": "^2.1.1",
+        "kind-of": "^6.0.3"
     }
 }
