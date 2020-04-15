@@ -255,7 +255,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   handleIframeLoad(): void {
-    if (server) {
+    if (this.iframeElement && this.iframeElement.nativeElement) {
       this.service.iframe = this.iframeElement.nativeElement;
       this.service.server = server;
       this.service.handleResolve();
