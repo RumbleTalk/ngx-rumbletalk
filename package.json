@@ -53,6 +53,7 @@
     },
     "resolutions": {
         "serialize-javascript": "^2.1.1",
-        "kind-of": "^6.0.3"
+        "kind-of": "^6.0.3",
+        "websocket-extensions": "^0.1.4"
     }
 }
