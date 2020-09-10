@@ -78,7 +78,9 @@ Use this in any of your `html` file where you would like to place the chat
   <tr>
     <td>image</td>
     <td>string</td>
-    <td style="word-break: break-all;">https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png</td>
+    <td>
+      <a href="https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png" target="_blank">default image</a>
+    </td>
     <td>If <i>floating</i> is <i>true</i>, sets the image used for the floating chat</td>
   </tr>
   <tr>
