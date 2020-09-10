@@ -54,13 +54,13 @@ Use this in any of your `html` file where you would like to place the chat
   <tr>
     <td>width</td>
     <td>number</td>
-    <td>**700** if *floating* is true</td>
+    <td><b>700</b> if <i>floating</i> is true</td>
     <td>Size of the width of the chat in pixels</td>
   </tr>
   <tr>
     <td>height</td>
     <td>number</td>
-    <td>**500** if *floating* is true</td>
+    <td><b>500</b> if <i>floating</i> is true</td>
     <td>Size of the height of the chat in pixels</td>
   </tr>
   <tr>
@@ -73,19 +73,19 @@ Use this in any of your `html` file where you would like to place the chat
     <td>side</td>
     <td>string</td>
     <td>right</td>
-    <td>If *floating* is *true*, sets which side of the window will the floating chat be displayed, can only be either 'left' or 'right'</td>
+    <td>If <i>floating</i> is *true*, sets which side of the window will the floating chat be displayed, can only be either 'left' or 'right'</td>
   </tr>
   <tr>
     <td>image</td>
     <td>string</td>
     <td style="word-break: break-all;">https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png</td>
-    <td>If *floating* is *true*, sets the image used for the floating chat</td>
+    <td>If <i>floating</i> is *true*, sets the image used for the floating chat</td>
   </tr>
   <tr>
     <td>counter</td>
     <td>string</td>
     <td>14:23</td>
-    <td>If *floating* is *true*, top:left coordinates of the counter/number of users in the chat</td>
+    <td>If <i>floating</i> is *true*, top:left coordinates of the counter/number of users in the chat</td>
   </tr>
 </table>
 
