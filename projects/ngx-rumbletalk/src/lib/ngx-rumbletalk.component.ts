@@ -35,11 +35,11 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public side = 'right';
   @Input() public image = 'https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png';
   @Input() public counter = 'false';
-  @Input() public counterTop = 14;
-  @Input() public counterLeft = 23;
 
   mobile: boolean;
   cdn = 'https://d1pfint8izqszg.cloudfront.net/';
+  counterTop = 14;
+  counterLeft = 23;
 
   constructor(private service: NgxRumbletalkService) {}
 
