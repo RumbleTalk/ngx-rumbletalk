@@ -34,7 +34,8 @@ Use this in any of your `html` file where you would like to place the chat
 
 ### Floating
 ```typescript
-<ngx-rumbletalk [hash]="hash" [floating]="true" [side]="'right'"></ngx-rumbletalk>
+<ngx-rumbletalk [hash]="hash" [floating]="true" [side]="'right'" [image]="'https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png'" [counter]="'14:23'">
+</ngx-rumbletalk>
 ```
 
 | Option            | Type                           | Default                       | Description
@@ -44,6 +45,8 @@ Use this in any of your `html` file where you would like to place the chat
 | height            | number                         | **500** if *floating* is true | Size of the height of the chat in pexels
 | floating          | boolean                        | false                         | Displays the chat in a floating manner or else it is fixed
 | side              | string                         | right                         | Sets which side of the window will the floating chat be displayed, can only be either 'left' or 'right'. Effect can only be seen if *floating* is set to *true*
+| image             | string                         | https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png | Image used for the floating chat. Effect can only be seen if *floating* is set to *true*
+| counter           | string                         | '14:23'                       | Top:Left coordinates of the counter/number of users in the chat. Effect can only be seen if *floating* is set to *true*
 
 ## Service usage
 
