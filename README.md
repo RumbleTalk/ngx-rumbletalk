@@ -73,19 +73,19 @@ Use this in any of your `html` file where you would like to place the chat
     <td>side</td>
     <td>string</td>
     <td>right</td>
-    <td>If <i>floating</i> is *true*, sets which side of the window will the floating chat be displayed, can only be either 'left' or 'right'</td>
+    <td>If <i>floating</i> is <i>true</i>, sets which side of the window will the floating chat be displayed, can only be either 'left' or 'right'</td>
   </tr>
   <tr>
     <td>image</td>
     <td>string</td>
     <td style="word-break: break-all;">https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png</td>
-    <td>If <i>floating</i> is *true*, sets the image used for the floating chat</td>
+    <td>If <i>floating</i> is <i>true</i>, sets the image used for the floating chat</td>
   </tr>
   <tr>
     <td>counter</td>
     <td>string</td>
     <td>14:23</td>
-    <td>If <i>floating</i> is *true*, top:left coordinates of the counter/number of users in the chat</td>
+    <td>If <i>floating</i> is <i>true</i>, top:left coordinates of the counter/number of users in the chat</td>
   </tr>
 </table>
 
