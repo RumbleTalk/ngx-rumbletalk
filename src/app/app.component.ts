@@ -12,7 +12,7 @@ import {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  hash = 'hiS6oJX~';
+  hash = 'ykUIwC4J';
   title = 'ngx-rumbletalk-app';
   username: string;
   password: string;
