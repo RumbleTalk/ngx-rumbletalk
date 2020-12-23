@@ -155,7 +155,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
           this.instantiateQuery();
         }
       },
-      ignore => location.reload()
+      ignore => {}
     );
   }
 
