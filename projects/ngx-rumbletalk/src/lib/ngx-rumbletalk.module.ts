@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 import { NgxRumbletalkService } from './ngx-rumbletalk.service';
 import { NgxRumbletalkComponent } from './ngx-rumbletalk.component';
@@ -9,7 +9,7 @@ import { NgxRumbletalkComponent } from './ngx-rumbletalk.component';
 @NgModule({
   providers: [NgxRumbletalkService],
   declarations: [NgxRumbletalkComponent],
-  imports: [HttpClientModule, BrowserModule, FormsModule],
+  imports: [HttpClientModule, CommonModule, FormsModule],
   exports: [NgxRumbletalkComponent]
 })
 export class NgxRumbletalkModule {}
