@@ -67,6 +67,10 @@
         "sockjs": "^0.3.20",
         "elliptic": "^6.5.4",
         "socket.io": "^2.4.0",
-        "y18n": "4.0.1"
+        "y18n": "^4.0.1",
+        "xmlhttprequest-ssl": "^1.6.2",
+        "url-parse": "^1.5.0",
+        "ng-packagr": "^10.1.1",
+        "hosted-git-info": "^2.8.9"
     }
 }
