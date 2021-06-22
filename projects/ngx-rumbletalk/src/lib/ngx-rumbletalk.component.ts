@@ -25,9 +25,9 @@ declare const window: any;
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
-  @ViewChild('iframe', { static: false }) iframeElement: ElementRef;
-  @ViewChild('chatDiv', { static: false }) chatDivElement: ElementRef;
-  @ViewChild('counter', { static: false }) counterElement: ElementRef;
+  @ViewChild('iframe') iframeElement: ElementRef;
+  @ViewChild('chatDiv') chatDivElement: ElementRef;
+  @ViewChild('counter') counterElement: ElementRef;
   @Input() public hash: string;
   @Input() public width: number;
   @Input() public height: number;

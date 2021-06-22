@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/ngx-rumbletalk-app",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -50,6 +51,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -142,6 +147,11 @@
           "options": {
             "tsConfig": "projects/ngx-rumbletalk/tsconfig.lib.json",
             "project": "projects/ngx-rumbletalk/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-rumbletalk/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -167,5 +177,8 @@
       }
     }
   },
-  "defaultProject": "ngx-rumbletalk-app"
+  "defaultProject": "ngx-rumbletalk-app",
+  "cli": {
+    "analytics": false
+  }
 }
