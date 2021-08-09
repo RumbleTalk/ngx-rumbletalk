@@ -3,7 +3,8 @@ import {
   NgxRumbletalkService,
   LoginData,
   LogoutData,
-  LogoutCbData
+  LogoutCbData,
+  OpenPrivateChatData
 } from 'ngx-rumbletalk';
 
 @Component({
@@ -50,5 +51,13 @@ export class AppComponent {
       }
     };
     this.service.logoutCB(data);
+  }
+
+  handleOpenPrivateChat(): void {
+    const data: OpenPrivateChatData = {
+      hash: this.hash,
+      username: this.username
+    };
+    this.service.openPrivateChat(data);
   }
 }

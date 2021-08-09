@@ -105,7 +105,6 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
       }
 
       this.addListeners();
-      this.instantiateQuery();
     });
   }
 
@@ -114,6 +113,20 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
    */
   addListeners(): void {
     window.addEventListener('message', this.info.bind(this), false);
+
+    if (!this.mobile && this.floating) {
+      window.addEventListener('keyup', this.escClose.bind(this), false);
+    }
+  }
+
+  /**
+   * hides the chat when the "Esc" key is clicked
+   * @param {KeyboardEvent} event - the initiating event
+   */
+  escClose(event): void {
+    if (event.key === 'Escape') {
+      this.toggleFloatingChat(null, true);
+    }
   }
 
   /**
@@ -151,8 +164,6 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
           } else {
             this.iframeElement.nativeElement.location.href = address;
           }
-
-          this.instantiateQuery();
         }
       },
       ignore => {}
@@ -213,9 +224,9 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
 
   /**
    * hides or shows the floating chat
-   * @param boolean [close] - if set to true, will force hide
+   * @param boolean [esc] - if set to true, will force hide
    */
-  toggleFloatingChat(event = null): void {
+  toggleFloatingChat(event = null, esc = false): void {
     if (event) {
       event.stopPropagation();
     }
@@ -227,6 +238,10 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
       chatDiv.classList.add('chat-div-out');
       chatDiv.style.overflow = 'hidden';
     } else {
+      if (esc) {
+        return;
+      }
+
       chatDiv.classList.remove('chat-div-out');
       chatDiv.classList.add('chat-div-in');
       chatDiv.style.overflow = 'visible';
@@ -259,6 +274,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
       this.service.iframe = this.iframeElement.nativeElement;
       this.service.server = server;
       this.service.handleResolve();
+      this.instantiateQuery();
     }
   }
 

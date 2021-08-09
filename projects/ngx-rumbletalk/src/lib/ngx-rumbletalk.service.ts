@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { LoginData } from './interface/login-data';
 import { LogoutData } from './interface/logout-data';
 import { LogoutCbData } from './interface/logout-cb-data';
+import { OpenPrivateChatData } from './interface/open-private-chat-data';
 declare const window: any;
 
 @Injectable()
@@ -25,7 +26,8 @@ export class NgxRumbletalkService {
     LOGIN: 'pm.3',
     LOGIN_SUCCESS: 'pm.4',
     LOGIN_ALREADY_LOGGED_IN: 'pm.5',
-    LOGOUT: 'pm.6'
+    LOGOUT: 'pm.6',
+    OPEN_PRIVATE_CHAT: 'pm.7'
 };
 
   constructor(private http: HttpClient) {}
@@ -70,49 +72,46 @@ export class NgxRumbletalkService {
       message.hash = data.hash;
       message.forceLogin = data.forceLogin;
 
-      /* if the chat target is available, use post message option */
-      this.iframeLoaded.then(() => {
-        /* keep sending the data to the chat until the chat responds */
-        const intervalHandle = setInterval(() => {
-          this.postMessage(message);
-        }, 1000);
+      /* keep sending the data to the chat until the chat responds */
+      const intervalHandle = setInterval(() => {
+        this.postMessage(message);
+      }, 1000);
 
-        window.addEventListener(
-          'message',
-          function handlePostMessage(event) {
-            /* validates the origin to be from a chat */
-            if (!this.validateChatOrigin(event.origin)) {
-              console.log('Error: invalid origin in "login" function');
-            }
+      window.addEventListener(
+        'message',
+        function handlePostMessage(event) {
+          /* validates the origin to be from a chat */
+          if (!this.validateChatOrigin(event.origin)) {
+            console.log('Error: invalid origin in "login" function');
+          }
 
-            if (typeof event.data !== 'object') {
-              console.log(`Error: invalid data received in RumbleTalk SDK: ${event.data}`);
-            }
+          if (typeof event.data !== 'object') {
+            console.log(`Error: invalid data received in RumbleTalk SDK: ${event.data}`);
+          }
 
-            /* different chat callback */
-            if (event.data.hash !== data.hash) {
-              reject('Error: chat hash mismatch');
-            }
+          /* different chat callback */
+          if (event.data.hash !== data.hash) {
+            reject('Error: chat hash mismatch');
+          }
 
-            /* validate that the message is of a successful login of the specific chat */
-            if (
-              event.data.type === this.postMessageEvents.LOGIN_SUCCESS ||
-              event.data.type === this.postMessageEvents.LOGIN_ALREADY_LOGGED_IN
-            ) {
-              clearInterval(intervalHandle);
-              window.removeEventListener('message', handlePostMessage);
+          /* validate that the message is of a successful login of the specific chat */
+          if (
+            event.data.type === this.postMessageEvents.LOGIN_SUCCESS ||
+            event.data.type === this.postMessageEvents.LOGIN_ALREADY_LOGGED_IN
+          ) {
+            clearInterval(intervalHandle);
+            window.removeEventListener('message', handlePostMessage);
 
-              resolve({
-                status: event.data.type,
-                message: event.data.type === this.postMessageEvents.LOGIN_SUCCESS
-                    ? 'success'
-                    : 'already logged in'
-              });
-            }
-          }.bind(this),
-          false
-        );
-      }).catch(err => console.log(err));
+            resolve({
+              status: event.data.type,
+              message: event.data.type === this.postMessageEvents.LOGIN_SUCCESS
+                  ? 'success'
+                  : 'already logged in'
+            });
+          }
+        }.bind(this),
+        false
+      );
     });
   }
 
@@ -130,52 +129,60 @@ export class NgxRumbletalkService {
       message.username = data.username;
     }
 
-    this.iframeLoaded.then(() => {
-      this.postMessage(message);
-    }).catch(err => console.log(err));
+    this.postMessage(message);
   }
 
   logoutCB(data: LogoutCbData): void {
-    this.iframeLoaded.then(() => {
-      const intervalHandle = setInterval(() => {
-        this.postMessage({type: this.postMessageEvents.LOGOUT_CB});
-      }, 1000);
+    const intervalHandle = setInterval(() => {
+      this.postMessage({type: this.postMessageEvents.LOGOUT_CB});
+    }, 1000);
 
-      window.addEventListener('message', event => {
-        /* validates the origin to be from a chat */
-        if (!this.validateChatOrigin(event.origin)) {
-          return;
-        }
+    window.addEventListener('message', event => {
+      /* validates the origin to be from a chat */
+      if (!this.validateChatOrigin(event.origin)) {
+        return;
+      }
 
-        /* expecting an object */
-        if (typeof event.data !== 'object') {
-          return;
-        }
+      /* expecting an object */
+      if (typeof event.data !== 'object') {
+        return;
+      }
 
-        /* different chat callback */
-        if (event.data.hash !== data.hash) {
-          return;
-        }
+      /* different chat callback */
+      if (event.data.hash !== data.hash) {
+        return;
+      }
 
-        /* callback registered */
-        if (event.data.type === this.postMessageEvents.LOGOUT_CB_RECEIVED) {
-          clearInterval(intervalHandle);
-          return;
-        }
+      /* callback registered */
+      if (event.data.type === this.postMessageEvents.LOGOUT_CB_RECEIVED) {
+        clearInterval(intervalHandle);
+        return;
+      }
 
-        /* validate event type */
-        if (event.data.type !== this.postMessageEvents.LOGOUT_CB) {
-          return;
-        }
+      /* validate event type */
+      if (event.data.type !== this.postMessageEvents.LOGOUT_CB) {
+        return;
+      }
 
-        data.callback(event.data.reason);
-      }, false);
-    }).catch(ignore => {
-      setTimeout(() => {
-        this.logoutCB(data);
-      }, 1000);
-      return;
-    });
+      data.callback(event.data.reason);
+    }, false);
+  }
+
+  openPrivateChat(data: OpenPrivateChatData): void {
+    const message: any = {
+      type: this.postMessageEvents.OPEN_PRIVATE_CHAT,
+      hash: data.hash
+    };
+
+    if (data.userId) {
+      message.userId = data.userId;
+    }
+
+    if (data.username) {
+      message.username = data.username;
+    }
+
+    this.postMessage(message);
   }
 
   postMessage(data) {

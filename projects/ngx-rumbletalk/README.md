@@ -123,6 +123,17 @@ this.rumbletalkService.logoutCB(data);
 
 Use to logout from your chat but with callback that you can use for whatever purpose
 
+#### openPrivateChat(data: OpenPrivateChatData): void
+
+```javascript
+this.ref.current.openPrivateChat({
+    hash: hash,
+    username: username,
+});
+```
+
+Use to open the private chat
+
 ## Interface
 
 ### LoginData
@@ -153,5 +164,15 @@ export interface LogoutData {
 export interface LogoutCbData {
   hash: string;
   callback: any;
+}
+```
+
+### OpenPrivateChatData
+
+```typescript
+export interface OpenPrivateChatData {
+  hash: string;
+  userId?: string;
+  username?: string;
 }
 ```

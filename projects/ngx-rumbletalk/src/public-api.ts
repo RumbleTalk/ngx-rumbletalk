@@ -8,3 +8,4 @@ export * from './lib/ngx-rumbletalk.module';
 export * from './lib/interface/login-data';
 export * from './lib/interface/logout-data';
 export * from './lib/interface/logout-cb-data';
+export * from './lib/interface/open-private-chat-data';
