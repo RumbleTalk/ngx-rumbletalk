@@ -34,7 +34,7 @@ export class NgxRumbletalkService {
 
   address(hash: string): Observable<string> {
     return this.http
-      .get<string>(`https://www.rumbletalk.com/client/service.php?hash=${hash}`)
+      .get<string>(`https://rumbletalk.com/client/service.php?hash=${hash}`)
       .pipe(map((data: any) => data.address));
   }
 
