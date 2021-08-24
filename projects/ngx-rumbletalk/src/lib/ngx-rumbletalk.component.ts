@@ -12,7 +12,7 @@ import {
 import { NgxRumbletalkService } from './ngx-rumbletalk.service';
 
 const protocol = 'https://';
-const baseWebUrl = 'https://www.rumbletalk.com/';
+const baseWebUrl = 'https://rumbletalk.com/';
 const serviceRelativeUrl = 'client/service.php?hash=';
 let server: string;
 let messageInterval: any;
