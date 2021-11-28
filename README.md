@@ -1,6 +1,28 @@
 # NgxRumbletalk
 
-An angular library for Rumbletalk chat users
+An angular library for Rumbletalk group chats. Your platform for creating engaging messaging 
+service for online events, web-site, platform ,or app.
+ 
+![RumbleTalk Chat](https://d1pfint8izqszg.cloudfront.net/web7/images/q&a_fold.png)
+
+## Features
+
+- Angular compatibility
+- CSS Customization
+- Polls
+- create multiple rooms
+- Video and audio calls
+- Approve message mode (Q&A)
+- Backend agnostic
+- voice and audio messages 
+- Images, videos, files & emojis
+- Private messages
+- Text formatting - bold, italic, strikethrough, underline
+- Online / Offline users status
+- Flexible options and slots
+- Different themes
+- Floating or embed chat
+- Mute all
 
 ## Installation
 
@@ -123,6 +145,17 @@ this.rumbletalkService.logoutCB(data);
 
 Use to logout from your chat but with callback that you can use for whatever purpose
 
+#### openPrivateChat(data: OpenPrivateChatData): void
+
+```javascript
+this.ref.current.openPrivateChat({
+    hash: hash,
+    username: username,
+});
+```
+
+Use to open the private chat
+
 ## Interface
 
 ### LoginData
@@ -153,5 +186,15 @@ export interface LogoutData {
 export interface LogoutCbData {
   hash: string;
   callback: any;
+}
+```
+
+### OpenPrivateChatData
+
+```typescript
+export interface OpenPrivateChatData {
+  hash: string;
+  userId?: string;
+  username?: string;
 }
 ```
