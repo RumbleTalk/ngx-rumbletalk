@@ -7,12 +7,18 @@
     "type": "git",
     "url": "https://github.com/RumbleTalk/ngx-rumbletalk.git"
   },
-  "homepage": "https://github.com/RumbleTalk/ngx-rumbletalk",
+  "homepage": "https://rumbletalk.com",
   "keywords": [
     "angular",
     "javascript",
     "typescript",
-    "rumbletalk"
+    "rumbletalk",
+    "chatroom",
+    "group chat",
+    "chat room",
+    "groupchat"
+    "chat service",
+    "chat"
   ],
   "license": "MIT",
   "dependencies": {
