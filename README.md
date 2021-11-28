@@ -1,7 +1,7 @@
 # NgxRumbletalk
 
 An angular library for Rumbletalk group chats. Your platform for creating engaging messaging 
-service for online events, web-site, platform ,or app.
+chat rooms for online events, web-site, platforms ,or apps.
  
 ![RumbleTalk Chat](https://d1pfint8izqszg.cloudfront.net/web7/images/q&a_fold.png)
 
