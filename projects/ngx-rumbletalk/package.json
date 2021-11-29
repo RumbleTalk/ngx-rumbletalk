@@ -1,6 +1,6 @@
 {
   "name": "ngx-rumbletalk",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "RumbleTalk Angular integration",
   "author": "RumbleTalk",
   "repository": {
@@ -16,7 +16,7 @@
     "chatroom",
     "group chat",
     "chat room",
-    "groupchat"
+    "groupchat",
     "chat service",
     "chat"
   ],
