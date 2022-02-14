@@ -1,5 +1,11 @@
 <div class="rumbletalk-embed" [style.width.px]="width" [style.height.px]="height" *ngIf="!floating">
-  <iframe #iframe frameBorder="0" allow="microphone; camera" allowtransparency="true" (load)="handleIframeLoad()"></iframe>
+  <iframe
+    #iframe
+    frameBorder="0"
+    allow="microphone; camera"
+    allowtransparency="true"
+    (load)="handleIframeLoad()"
+  ></iframe>
 </div>
 
 <div

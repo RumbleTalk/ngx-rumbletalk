@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -27,8 +27,8 @@ export class NgxRumbletalkService {
     LOGIN_SUCCESS: 'pm.4',
     LOGIN_ALREADY_LOGGED_IN: 'pm.5',
     LOGOUT: 'pm.6',
-    OPEN_PRIVATE_CHAT: 'pm.7'
-};
+    OPEN_PRIVATE_CHAT: 'pm.7',
+  };
 
   constructor(private http: HttpClient) {}
 
@@ -104,9 +104,7 @@ export class NgxRumbletalkService {
 
             resolve({
               status: event.data.type,
-              message: event.data.type === this.postMessageEvents.LOGIN_SUCCESS
-                  ? 'success'
-                  : 'already logged in'
+              message: event.data.type === this.postMessageEvents.LOGIN_SUCCESS ? 'success' : 'already logged in',
             });
           }
         }.bind(this),
@@ -118,7 +116,7 @@ export class NgxRumbletalkService {
   logout(data: LogoutData): void {
     const message: any = {
       type: this.postMessageEvents.LOGOUT,
-      hash: data.hash
+      hash: data.hash,
     };
 
     if (data.userId) {
@@ -134,44 +132,48 @@ export class NgxRumbletalkService {
 
   logoutCB(data: LogoutCbData): void {
     const intervalHandle = setInterval(() => {
-      this.postMessage({type: this.postMessageEvents.LOGOUT_CB});
+      this.postMessage({ type: this.postMessageEvents.LOGOUT_CB });
     }, 1000);
 
-    window.addEventListener('message', event => {
-      /* validates the origin to be from a chat */
-      if (!this.validateChatOrigin(event.origin)) {
-        return;
-      }
+    window.addEventListener(
+      'message',
+      (event) => {
+        /* validates the origin to be from a chat */
+        if (!this.validateChatOrigin(event.origin)) {
+          return;
+        }
 
-      /* expecting an object */
-      if (typeof event.data !== 'object') {
-        return;
-      }
+        /* expecting an object */
+        if (typeof event.data !== 'object') {
+          return;
+        }
 
-      /* different chat callback */
-      if (event.data.hash !== data.hash) {
-        return;
-      }
+        /* different chat callback */
+        if (event.data.hash !== data.hash) {
+          return;
+        }
 
-      /* callback registered */
-      if (event.data.type === this.postMessageEvents.LOGOUT_CB_RECEIVED) {
-        clearInterval(intervalHandle);
-        return;
-      }
+        /* callback registered */
+        if (event.data.type === this.postMessageEvents.LOGOUT_CB_RECEIVED) {
+          clearInterval(intervalHandle);
+          return;
+        }
 
-      /* validate event type */
-      if (event.data.type !== this.postMessageEvents.LOGOUT_CB) {
-        return;
-      }
+        /* validate event type */
+        if (event.data.type !== this.postMessageEvents.LOGOUT_CB) {
+          return;
+        }
 
-      data.callback(event.data.reason);
-    }, false);
+        data.callback(event.data.reason);
+      },
+      false
+    );
   }
 
   openPrivateChat(data: OpenPrivateChatData): void {
     const message: any = {
       type: this.postMessageEvents.OPEN_PRIVATE_CHAT,
-      hash: data.hash
+      hash: data.hash,
     };
 
     if (data.userId) {
@@ -187,12 +189,10 @@ export class NgxRumbletalkService {
 
   postMessage(data) {
     try {
-      const target = this.iframe instanceof HTMLIFrameElement
-        ? this.iframe.contentWindow
-        : this.iframe;
+      const target = this.iframe instanceof HTMLIFrameElement ? this.iframe.contentWindow : this.iframe;
       target.postMessage(data, `https://${this.server}`);
     } catch (error) {
-      console.log(error.name, error.message);
+      console.log(error);
     }
   }
 
