@@ -8,9 +8,8 @@ describe('NgxRumbletalkComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NgxRumbletalkComponent ]
-    })
-    .compileComponents();
+      declarations: [NgxRumbletalkComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

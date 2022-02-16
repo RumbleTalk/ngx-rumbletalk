@@ -30,6 +30,13 @@ Using npm:
 
 `npm i ngx-rumbletalk`
 
+## Supported versions:
+
+| Angular Version        | Supported Version |
+| ---------------------- | ----------------- |
+| 13.x.x or later (Ivy)  | 3.x.x or later    |
+| <=12.x.x (View Engine) | 2.x.x             |
+
 ## Setup
 
 **Import** `NgxRumbletalkModule` to your application's module

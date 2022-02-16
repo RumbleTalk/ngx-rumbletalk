@@ -1,20 +1,20 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 import {
   NgxRumbletalkService,
   LoginData,
   LogoutData,
   LogoutCbData,
-  OpenPrivateChatData
-} from 'ngx-rumbletalk';
+  OpenPrivateChatData,
+} from "../../lib/public_api";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
-  hash = 'S_nZ0ED8';
-  title = 'ngx-rumbletalk-app';
+  hash = "S_nZ0ED8";
+  title = "ngx-rumbletalk-app";
   username: string;
   password: string;
 
@@ -25,20 +25,20 @@ export class AppComponent {
       hash: this.hash,
       username: this.username,
       password: this.password,
-      image: ''
+      image: "",
     };
     this.service
       .login(data)
-      .then(res => {
-        console.log('response', res);
+      .then((res) => {
+        console.log("response", res);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 
   handleLogout(): void {
     const data: LogoutData = {
       hash: this.hash,
-      username: this.username
+      username: this.username,
     };
     this.service.logout(data);
   }
@@ -46,9 +46,9 @@ export class AppComponent {
   handleLogoutCB(): void {
     const data: LogoutCbData = {
       hash: this.hash,
-      callback: reason => {
-        console.log('handleLogoutCB', reason);
-      }
+      callback: (reason) => {
+        console.log("handleLogoutCB", reason);
+      },
     };
     this.service.logoutCB(data);
   }
@@ -56,7 +56,7 @@ export class AppComponent {
   handleOpenPrivateChat(): void {
     const data: OpenPrivateChatData = {
       hash: this.hash,
-      username: this.username
+      username: this.username,
     };
     this.service.openPrivateChat(data);
   }

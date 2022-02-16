@@ -7,7 +7,7 @@ import {
   ViewChild,
   ElementRef,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 import { NgxRumbletalkService } from './ngx-rumbletalk.service';
 
@@ -22,7 +22,7 @@ declare const window: any;
   selector: 'ngx-rumbletalk',
   templateUrl: './ngx-rumbletalk.component.html',
   styleUrls: ['./ngx-rumbletalk.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('iframe') iframeElement: ElementRef;
@@ -45,10 +45,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     const ua = navigator.userAgent.toUpperCase();
-    this.mobile =
-      ua.indexOf('MOBILE') !== -1 ||
-      ua.indexOf('ANDROID') !== -1 ||
-      ua.indexOf('IOS') !== -1;
+    this.mobile = ua.indexOf('MOBILE') !== -1 || ua.indexOf('ANDROID') !== -1 || ua.indexOf('IOS') !== -1;
 
     if (this.floating) {
       if (!this.width) {
@@ -97,7 +94,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
    * Loads the iframe
    */
   loadIframe(): void {
-    this.service.address(this.hash).subscribe(address => {
+    this.service.address(this.hash).subscribe((address) => {
       server = address;
 
       if (!this.mobile) {
@@ -121,7 +118,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
 
   /**
    * hides the chat when the "Esc" key is clicked
-   * @param {KeyboardEvent} event - the initiating event
+   * @param KeyboardEvent event - the initiating event
    */
   escClose(event): void {
     if (event.key === 'Escape') {
@@ -154,7 +151,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
     const url = `${baseWebUrl}${serviceRelativeUrl}${this.hash}`;
 
     this.service.reload(url).subscribe(
-      res => {
+      (res) => {
         if (res.status) {
           server = res.address;
           const address = `${protocol}${server}/${this.hash}/`;
@@ -166,7 +163,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
           }
         }
       },
-      ignore => {}
+      (ignore) => {}
     );
   }
 
