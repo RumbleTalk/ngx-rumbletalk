@@ -7,9 +7,9 @@ import { NgxRumbletalkService } from './ngx-rumbletalk.service';
 import { NgxRumbletalkComponent } from './ngx-rumbletalk.component';
 
 @NgModule({
+  declarations: [NgxRumbletalkComponent],
   imports: [FormsModule, CommonModule, HttpClientModule],
   exports: [NgxRumbletalkComponent],
-  declarations: [NgxRumbletalkComponent],
   providers: [NgxRumbletalkService],
 })
 export class NgxRumbletalkModule {}

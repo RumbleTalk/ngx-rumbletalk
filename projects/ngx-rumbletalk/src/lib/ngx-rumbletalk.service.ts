@@ -9,10 +9,12 @@ import { LogoutCbData } from './interface/logout-cb-data';
 import { OpenPrivateChatData } from './interface/open-private-chat-data';
 declare const window: any;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class NgxRumbletalkService {
   public iframe: any;
-  public server: string;
+  public server = '';
   public handleResolve;
   public handleReject;
   public iframeLoaded = new Promise((resolve, reject) => {
@@ -79,7 +81,7 @@ export class NgxRumbletalkService {
 
       window.addEventListener(
         'message',
-        function handlePostMessage(event) {
+        function handlePostMessage(this: NgxRumbletalkService, event) {
           /* validates the origin to be from a chat */
           if (!this.validateChatOrigin(event.origin)) {
             console.log('Error: invalid origin in "login" function');
@@ -191,8 +193,8 @@ export class NgxRumbletalkService {
     try {
       const target = this.iframe instanceof HTMLIFrameElement ? this.iframe.contentWindow : this.iframe;
       target.postMessage(data, `https://${this.server}`);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log(error.name, error.message);
     }
   }
 

@@ -1,13 +1,13 @@
 import {
-  Component,
+  Input,
   OnInit,
   OnDestroy,
-  Input,
-  ChangeDetectionStrategy,
+  OnChanges,
+  Component,
   ViewChild,
   ElementRef,
-  OnChanges,
   SimpleChanges,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgxRumbletalkService } from './ngx-rumbletalk.service';
 
@@ -79,7 +79,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const hashVal = changes.hash;
+    const hashVal = changes['hash'];
 
     if (hashVal.currentValue !== hashVal.previousValue) {
       this.reload();
@@ -118,7 +118,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
 
   /**
    * hides the chat when the "Esc" key is clicked
-   * @param KeyboardEvent event - the initiating event
+   * @param {KeyboardEvent} event - the initiating event
    */
   escClose(event): void {
     if (event.key === 'Escape') {
@@ -223,7 +223,7 @@ export class NgxRumbletalkComponent implements OnInit, OnDestroy, OnChanges {
    * hides or shows the floating chat
    * @param boolean [esc] - if set to true, will force hide
    */
-  toggleFloatingChat(event = null, esc = false): void {
+  toggleFloatingChat(event: any = null, esc = false): void {
     if (event) {
       event.stopPropagation();
     }
