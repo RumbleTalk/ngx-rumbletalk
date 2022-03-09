@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NgxRumbletalkComponent } from './ngx-rumbletalk.component';
 
@@ -6,11 +6,12 @@ describe('NgxRumbletalkComponent', () => {
   let component: NgxRumbletalkComponent;
   let fixture: ComponentFixture<NgxRumbletalkComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [NgxRumbletalkComponent],
-    }).compileComponents();
-  }));
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ NgxRumbletalkComponent ]
+    })
+    .compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NgxRumbletalkComponent);

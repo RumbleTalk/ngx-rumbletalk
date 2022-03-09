@@ -1,20 +1,14 @@
-import { Component } from "@angular/core";
-import {
-  NgxRumbletalkService,
-  LoginData,
-  LogoutData,
-  LogoutCbData,
-  OpenPrivateChatData,
-} from "../../lib/public_api";
+import { Component } from '@angular/core';
+import { NgxRumbletalkService, LoginData, LogoutData, LogoutCbData, OpenPrivateChatData } from 'ngx-rumbletalk';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"],
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  hash = "S_nZ0ED8";
-  title = "ngx-rumbletalk-app";
+  hash = 'S_nZ0ED8';
+  title = 'ngx-rumbletalk-app';
   username: string;
   password: string;
 
@@ -25,12 +19,12 @@ export class AppComponent {
       hash: this.hash,
       username: this.username,
       password: this.password,
-      image: "",
+      image: '',
     };
     this.service
       .login(data)
       .then((res) => {
-        console.log("response", res);
+        console.log('response', res);
       })
       .catch((err) => console.log(err));
   }
@@ -47,7 +41,7 @@ export class AppComponent {
     const data: LogoutCbData = {
       hash: this.hash,
       callback: (reason) => {
-        console.log("handleLogoutCB", reason);
+        console.log('handleLogoutCB', reason);
       },
     };
     this.service.logoutCB(data);
