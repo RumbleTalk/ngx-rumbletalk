@@ -34,7 +34,9 @@ Using npm:
 
 | Angular Version        | Supported Version |
 | ---------------------- | ----------------- |
-| 13.x.x or later (Ivy)  | 3.x.x or later    |
+| 15.x.x                 | 5.x.x             |
+| 14.x.x                 | 4.x.x             |
+| 13.x.x (Ivy)           | 3.x.x             |
 | <=12.x.x (View Engine) | 2.x.x             |
 
 ## Setup
