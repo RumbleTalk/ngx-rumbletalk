@@ -1,8 +1,8 @@
 # NgxRumbletalk
 
-An angular library for Rumbletalk group chats. Your platform for creating engaging messaging 
+An angular library for Rumbletalk group chats. Your platform for creating engaging messaging
 chat rooms for online events, web-site, platforms ,or apps.
- 
+
 ![RumbleTalk Chat](https://d1pfint8izqszg.cloudfront.net/web7/images/q&a_fold.png)
 
 ## Features
@@ -14,7 +14,7 @@ chat rooms for online events, web-site, platforms ,or apps.
 - Video and audio calls
 - Approve message mode (Q&A)
 - Backend agnostic
-- voice and audio messages 
+- voice and audio messages
 - Images, videos, files & emojis
 - Private messages
 - Text formatting - bold, italic, strikethrough, underline
@@ -59,13 +59,13 @@ export class AppModule { }
 Use this in any of your `html` file where you would like to place the chat
 
 ### Basic use
-```typescript
+```html
 <ngx-rumbletalk [hash]="hash" [width]="700" [height]="500"></ngx-rumbletalk>
 ```
 
 ### Floating
-```typescript
-<ngx-rumbletalk [hash]="hash" [floating]="true" [side]="'right'" [image]="'https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png'" [counter]="'14:23'">
+```html
+<ngx-rumbletalk [hash]="hash" [floating]="true" side="right" image="https://d1pfint8izqszg.cloudfront.net/images/toolbar/toolbar.png" counter="14:23">
 </ngx-rumbletalk>
 ```
 
@@ -126,36 +126,37 @@ Use this in any of your `html` file where you would like to place the chat
 
 These are the available methods you can use in the chat by importing the `NgxRumbleTalkService` file
 
-> Note: Don't forget to import the service and interfaces `import { LoginData, LogoutData, LogoutCbData, NgxRumbletalkService } from 'ngx-rumbletalk';` in the file you are working on and inject it in your class constructor `constructor(private rumbletalkService: NgxRumbletalkService) {}`
+> Note: Don't forget to import the service and interfaces
+> `import { LoginData, LogoutData, LogoutCbData, NgxRumbletalkService } from 'ngx-rumbletalk';`
+> in the file you are working on and inject it in your class constructor
+> `constructor(private rumbletalkService: NgxRumbletalkService) {}`
 
 ### Methods
 
 #### login(data: LoginData): Promise<any>
-
 ```typescript
-this.rumbletalkService.login(data).then(response => console.log(response)).catch(error => console.log(error));
+this.rumbletalkService.login(data)
+    .then(response => console.log(response))
+    .catch(error => console.log(error));
 ```
 
-Use to login to your chat
+Used to log in to your chat
 
 #### logout(data: LogoutData): void
-
 ```typescript
 this.rumbletalkService.logout(data);
 ```
 
-Use to logout from your chat
+Used to log out from your chat
 
 #### logoutCB(data: LogoutCbData): void
-
 ```typescript
 this.rumbletalkService.logoutCB(data);
 ```
 
-Use to logout from your chat but with callback that you can use for whatever purpose
+Used to log out from your chat but with a callback that you can use for whatever purpose
 
 #### openPrivateChat(data: OpenPrivateChatData): void
-
 ```javascript
 this.ref.current.openPrivateChat({
     hash: hash,
@@ -163,12 +164,11 @@ this.ref.current.openPrivateChat({
 });
 ```
 
-Use to open the private chat
+Used to open the private chat
 
 ## Interface
 
 ### LoginData
-
 ```typescript
 export interface LoginData {
   hash: string;
@@ -180,7 +180,6 @@ export interface LoginData {
 ```
 
 ### LogoutData
-
 ```typescript
 export interface LogoutData {
   hash: string;
@@ -190,7 +189,6 @@ export interface LogoutData {
 ```
 
 ### LogoutCbData
-
 ```typescript
 export interface LogoutCbData {
   hash: string;
@@ -199,7 +197,6 @@ export interface LogoutCbData {
 ```
 
 ### OpenPrivateChatData
-
 ```typescript
 export interface OpenPrivateChatData {
   hash: string;
