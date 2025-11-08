@@ -10,18 +10,18 @@ chat rooms for online events, web-site, platforms ,or apps.
 - Angular compatibility
 - CSS Customization
 - Polls
-- create multiple rooms
+- Create multiple rooms
 - Video and audio calls
-- Approve message mode (Q&A)
+- Approve message mode (Q&A / Moderated Chat)
 - Backend agnostic
-- voice and audio messages
+- Voice and audio messages
 - Images, videos, files & emojis
 - Private messages
 - Text formatting - bold, italic, strikethrough, underline
-- Online / Offline users status
-- Flexible options and slots
-- Different themes
-- Floating or embed chat
+- Online / offline users status
+- Flexible options
+- Different designs / themes
+- Embed or floating chat
 - Mute all
 
 ## Installation
@@ -34,7 +34,7 @@ Using npm:
 
 | Angular Version        | Supported Version |
 | ---------------------- | ----------------- |
-| 15.x.x                 | 5.x.x             |
+| 15.x.x+                | 5.x.x             |
 | 14.x.x                 | 4.x.x             |
 | 13.x.x (Ivy)           | 3.x.x             |
 | <=12.x.x (View Engine) | 2.x.x             |
